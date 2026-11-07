@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chalkroom · a collaborative virtual classroom (prototype)</title>
+  <meta name="description" content="Chalkroom is a live virtual classroom: the teacher writes on a board, students ask private questions, and notes go up in Present mode.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Figtree:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-current="page" aria-label="Chalkroom overview">
+      <svg viewBox="0 0 34 34" aria-hidden="true"><rect x="2" y="4" width="30" height="22" rx="4" fill="#FCFBF7" stroke="#23211E" stroke-width="2.5"/><path d="M9 18 C12 10 15 22 18 14 S24 12 26 10" fill="none" stroke="#D9622B" stroke-width="2.4" stroke-linecap="round"/><rect x="12" y="27" width="14" height="3" rx="1.5" fill="#23211E"/></svg>
+      Chalkroom
+    </a>
+    <nav class="site-nav" aria-label="Demos">
+      <ul>
+        <li><a href="index.html" aria-current="page">Overview</a></li>
+        <li><a href="join.html">Join</a></li>
+        <li><a href="classroom.html">Classroom</a></li>
+        <li><a href="teacher.html">Teacher console</a></li>
+        <li><a href="ask.html">Ask</a></li>
+        <li><a href="present.html">Present</a></li>
+        <li><a href="devices.html">Devices</a></li>
+        <li><a href="architecture.html">Architecture</a></li>
+      </ul>
+    </nav>
+    <span class="badge">Prototype · simulated data</span>
+  </header>
+
+  <main class="page">
+    <section class="hero" aria-labelledby="hero-title">
+      <div>
+        <p class="eyebrow">A collaborative virtual classroom · iOS, Android, web</p>
+        <h1 id="hero-title">Chalkroom</h1>
+        <p class="pitch">A live classroom your students can draw on, and you can quietly answer. Teachers write on a shared board, students ask with a circle, and every question lands privately in the teacher's inbox.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="classroom.html">See the classroom</a>
+          <a class="btn" href="ask.html">Watch a question being asked</a>
+        </div>
+        <p class="pillars-note muted" style="margin-top:20px;font-size:var(--fs-sm)">Built for a founder review in under a minute: every demo has a Play button and a timeline.</p>
+      </div>
+      <div class="hero-scene">
+        <div class="room-frame" id="hero-room" aria-label="Looping animation of a teacher writing on the board"></div>
+      </div>
+    </section>
+
+    <section aria-labelledby="pillars-title">
+      <h2 id="pillars-title" class="sr-only">What Chalkroom does</h2>
+      <div class="pillars">
+        <div>
+          <h3>No accounts for students</h3>
+          <p>Scan a QR code or open a link, enter a display name, and you're in the room.</p>
+        </div>
+        <div>
+          <h3>Questions go to the teacher, not the board</h3>
+          <p>Students circle any spot. The teacher gets a snapshot in a private queue.</p>
+        </div>
+        <div>
+          <h3>Slides and captions in one screen</h3>
+          <p>Present mode pulls a projector screen down over the board, with live captions along the bottom.</p>
+        </div>
+      </div>
+    </section>
+
+    <section style="margin-top:48px" aria-labelledby="demos-title">
+      <p class="eyebrow">Seven demos and an architecture page</p>
+      <h2 id="demos-title" style="font-size:var(--fs-xl);margin-bottom:var(--s5)">Take the tour</h2>
+      <div class="grid-cards">
+        <a class="card card-link" href="join.html"><span class="num">01</span><h3>Join</h3><p>Scan the QR code, enter a name, land in class. Phone frame and desktop link.</p></a>
+        <a class="card card-link" href="classroom.html"><span class="num">02</span><h3>Classroom, student view</h3><p>The teacher walks to the board and writes. Hidden areas stay hidden until revealed.</p></a>
+        <a class="card card-link" href="teacher.html"><span class="num">03</span><h3>Teacher console</h3><p>Live view, board areas, lesson notes, the private questions inbox, and the roster.</p></a>
+        <a class="card card-link" href="ask.html"><span class="num">04</span><h3>Ask a question</h3><p>Student phone on the left, teacher inbox on the right. Circle something and send it.</p></a>
+        <a class="card card-link" href="present.html"><span class="num">05</span><h3>Present mode</h3><p>The projector screen comes down, slides follow the notes, captions type along the bottom.</p></a>
+        <a class="card card-link" href="devices.html"><span class="num">06</span><h3>Every device</h3><p>The same class in iPhone, Android and desktop frames. Layout adapts on each.</p></a>
+        <a class="card card-link" href="architecture.html"><span class="num">07</span><h3>Architecture</h3><p>How the real app would run on Supabase, with hosting, transcription, costs and privacy.</p></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-foot">
+    <span>Chalkroom prototype. Every live behaviour is scripted.</span>
+    <span>Works offline except for the fonts.</span>
+  </footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/chalk.js"></script>
+  <script src="assets/js/demo-engine.js"></script>
+  <script src="assets/js/index.js"></script>
+</body>
+</html>

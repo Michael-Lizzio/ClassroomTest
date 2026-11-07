@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Classroom, student view · Chalkroom prototype</title>
+  <meta name="description" content="The illustrated classroom as a student sees it: the teacher writes, and hidden areas stay hidden.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Figtree:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="Chalkroom overview">
+      <svg viewBox="0 0 34 34" aria-hidden="true"><rect x="2" y="4" width="30" height="22" rx="4" fill="#FCFBF7" stroke="#23211E" stroke-width="2.5"/><path d="M9 18 C12 10 15 22 18 14 S24 12 26 10" fill="none" stroke="#D9622B" stroke-width="2.4" stroke-linecap="round"/><rect x="12" y="27" width="14" height="3" rx="1.5" fill="#23211E"/></svg>
+      Chalkroom
+    </a>
+    <nav class="site-nav" aria-label="Demos">
+      <ul>
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="join.html">Join</a></li>
+        <li><a href="classroom.html" aria-current="page">Classroom</a></li>
+        <li><a href="teacher.html">Teacher console</a></li>
+        <li><a href="ask.html">Ask</a></li>
+        <li><a href="present.html">Present</a></li>
+        <li><a href="devices.html">Devices</a></li>
+        <li><a href="architecture.html">Architecture</a></li>
+      </ul>
+    </nav>
+    <span class="badge">Prototype · simulated data</span>
+  </header>
+
+  <main class="page">
+    <div class="page-head">
+      <div>
+        <p class="eyebrow">Demo 3 · Classroom</p>
+        <h1>The classroom, as students see it</h1>
+        <p>Ms. Okafor walks to the board and writes. Text is typed in letter by letter, timed with her arm. The bottom-right area is hidden until she reveals it.</p>
+      </div>
+      <div class="seg" role="group" aria-label="Choose a view">
+        <button type="button" id="view-student" aria-pressed="true">Student</button>
+        <button type="button" id="view-teacher" aria-pressed="false">Teacher</button>
+      </div>
+    </div>
+
+    <div class="grid-2" style="grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); align-items:start">
+      <div>
+        <div class="room-frame" id="room-frame"></div>
+
+        <div class="demo-bar" aria-label="Demo controls">
+          <span class="demo-title">Scripted demo</span>
+          <button class="btn btn-sm" type="button" data-action="play">Play</button>
+          <button class="btn btn-sm" type="button" data-action="restart">Restart</button>
+          <input type="range" aria-label="Timeline position" value="0">
+          <span class="time">0:00 / 0:40</span>
+          <p class="scene-cue" id="cue">Press Play to watch the lesson build on the board.</p>
+        </div>
+      </div>
+
+      <aside class="stack" aria-label="Your view">
+        <section class="panel" id="student-panel">
+          <div class="panel-head">
+            <h2>Biology 101: Photosynthesis</h2>
+            <span class="chip">Live</span>
+          </div>
+          <p class="muted">with Ms. Naomi Okafor · Room 214</p>
+          <p id="area-status" class="mode-line" style="margin-top:12px">Calvin cycle is hidden. Your teacher will reveal it.</p>
+          <div style="margin-top:16px">
+            <a class="btn btn-primary" href="ask.html">Ask a question about this board</a>
+          </div>
+        </section>
+
+        <section class="panel" aria-labelledby="my-q-title">
+          <div class="panel-head"><h2 id="my-q-title">Your questions</h2></div>
+          <ul class="my-questions" id="my-questions">
+            <li class="muted">Nothing yet. Tap or circle the board to ask.</li>
+          </ul>
+        </section>
+
+        <section class="panel" id="teacher-panel" hidden>
+          <div class="panel-head"><h2>What you see as the teacher</h2></div>
+          <p>You see the whole board. Hidden areas are dimmed and tagged <strong>HIDDEN</strong>, so you always know what students can't see.</p>
+          <p class="muted" style="margin-top:10px">Student questions never appear on the board. They go to your private inbox in the teacher console.</p>
+          <div style="margin-top:14px"><a class="btn" href="teacher.html">Open the teacher console</a></div>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="site-foot">
+    <span>Chalkroom prototype. Every live behaviour is scripted.</span>
+    <span>Works offline except for the fonts.</span>
+  </footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/chalk.js"></script>
+  <script src="assets/js/demo-engine.js"></script>
+  <script src="assets/js/classroom.js"></script>
+</body>
+</html>

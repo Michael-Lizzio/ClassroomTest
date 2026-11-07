@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ask a question · Chalkroom prototype</title>
+  <meta name="description" content="A student circles part of the board and asks a question; it arrives privately in the teacher inbox.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Figtree:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="Chalkroom overview">
+      <svg viewBox="0 0 34 34" aria-hidden="true"><rect x="2" y="4" width="30" height="22" rx="4" fill="#FCFBF7" stroke="#23211E" stroke-width="2.5"/><path d="M9 18 C12 10 15 22 18 14 S24 12 26 10" fill="none" stroke="#D9622B" stroke-width="2.4" stroke-linecap="round"/><rect x="12" y="27" width="14" height="3" rx="1.5" fill="#23211E"/></svg>
+      Chalkroom
+    </a>
+    <nav class="site-nav" aria-label="Demos">
+      <ul>
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="join.html">Join</a></li>
+        <li><a href="classroom.html">Classroom</a></li>
+        <li><a href="teacher.html">Teacher console</a></li>
+        <li><a href="ask.html" aria-current="page">Ask</a></li>
+        <li><a href="present.html">Present</a></li>
+        <li><a href="devices.html">Devices</a></li>
+        <li><a href="architecture.html">Architecture</a></li>
+      </ul>
+    </nav>
+    <span class="badge">Prototype · simulated data</span>
+  </header>
+
+
+  <main class="page">
+    <div class="page-head">
+      <div>
+        <p class="eyebrow">Demo 4 · Ask a question</p>
+        <h1>Circle it, ask it, it lands in the inbox</h1>
+        <p>On the left, a student taps or circles part of the board and writes a question. On the right, the teacher gets it privately, with a snapshot of exactly what was circled. Try it by hand: drag on the phone's board.</p>
+      </div>
+    </div>
+
+    <div class="split-ask">
+      <div class="student-col">
+        <p class="eyebrow" style="margin:0">Student · Priya's phone</p>
+        <div class="phone" aria-label="Student phone with the lesson board">
+          <div class="phone-notch" aria-hidden="true"></div>
+          <div class="phone-screen">
+            <div class="phone-status" aria-hidden="true"><span>9:42</span><span>100%</span></div>
+            <div class="phone-body" id="phone-body">
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:4px 14px 8px">
+                <strong style="font-size:var(--fs-sm)">Biology 101</strong>
+                <span class="chip chip-done">Live</span>
+              </div>
+              <div class="phone-board-wrap" id="student-board" aria-label="Lesson board. Drag to circle something, or tap to point at it."></div>
+              <div style="padding:10px 14px 4px;font-size:var(--fs-sm);color:var(--ink-2)">Tap or circle the board to ask about it.</div>
+              <div style="padding:6px 14px 0;font-weight:800;font-size:var(--fs-sm)">My questions</div>
+              <ul class="my-questions" id="my-questions" style="padding:6px 14px 0"></ul>
+              <div class="composer" id="composer" role="dialog" aria-modal="false" aria-labelledby="composer-title">
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                  <strong id="composer-title" style="font-size:var(--fs-sm)">Ask about this spot</strong>
+                  <button class="btn btn-sm btn-ghost" type="button" id="composer-cancel" style="min-height:36px">Cancel</button>
+                </div>
+                <div class="composer-snap" id="composer-snap"></div>
+                <label class="sr-only" for="question-text">Your question</label>
+                <textarea class="textarea" id="question-text" rows="2" maxlength="140" placeholder="Type your question…" style="min-height:64px"></textarea>
+                <button class="btn btn-primary" type="button" id="send-q">Send privately</button>
+                <p class="sent-note" id="sent-note" role="status">Sent privately to your teacher</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="console-side" style="gap:16px" aria-label="Teacher console">
+        <div class="console-title" style="justify-content:space-between">
+          <div>
+            <p class="eyebrow" style="margin:0">Teacher · Ms. Okafor</p>
+            <h2 style="margin-top:4px">Questions inbox</h2>
+          </div>
+          <span class="chip" id="inbox-count">0 new</span>
+        </div>
+        <p class="muted" style="font-size:var(--fs-sm)">Private to the teacher. Snapshots are taken from the board at the moment of asking.</p>
+        <section class="panel inbox-panel" aria-label="Questions inbox">
+          <div class="questions" id="inbox" aria-live="polite"></div>
+        </section>
+      </div>
+    </div>
+
+    <div class="demo-bar" aria-label="Demo controls" style="margin-top:32px">
+      <span class="demo-title">Scripted demo</span>
+      <button class="btn btn-sm" type="button" data-action="play">Play</button>
+      <button class="btn btn-sm" type="button" data-action="restart">Restart</button>
+      <input type="range" aria-label="Timeline position" value="0">
+      <span class="time">0:00 / 0:14</span>
+      <p class="scene-cue" id="cue">Press Play, or drag on the phone's board to ask for real.</p>
+    </div>
+  </main>
+
+  <footer class="site-foot">
+    <span>Chalkroom prototype. Every live behaviour is scripted.</span>
+    <span>Works offline except for the fonts.</span>
+  </footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/chalk.js"></script>
+  <script src="assets/js/demo-engine.js"></script>
+  <script src="assets/js/inbox.js"></script>
+  <script src="assets/js/ask.js"></script>
+</body>
+</html>

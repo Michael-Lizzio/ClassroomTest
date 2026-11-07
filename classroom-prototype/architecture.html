@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Architecture · Chalkroom prototype</title>
+  <meta name="description" content="How the real app would be built on Supabase, hosted, transcribed, priced and kept safe for students.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Figtree:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="Chalkroom overview">
+      <svg viewBox="0 0 34 34" aria-hidden="true"><rect x="2" y="4" width="30" height="22" rx="4" fill="#FCFBF7" stroke="#23211E" stroke-width="2.5"/><path d="M9 18 C12 10 15 22 18 14 S24 12 26 10" fill="none" stroke="#D9622B" stroke-width="2.4" stroke-linecap="round"/><rect x="12" y="27" width="14" height="3" rx="1.5" fill="#23211E"/></svg>
+      Chalkroom
+    </a>
+    <nav class="site-nav" aria-label="Demos">
+      <ul>
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="join.html">Join</a></li>
+        <li><a href="classroom.html">Classroom</a></li>
+        <li><a href="teacher.html">Teacher console</a></li>
+        <li><a href="ask.html">Ask</a></li>
+        <li><a href="present.html" aria-current="page">Present</a></li>
+        <li><a href="devices.html">Devices</a></li>
+        <li><a href="architecture.html" aria-current="page">Architecture</a></li>
+      </ul>
+    </nav>
+    <span class="badge">Prototype · simulated data</span>
+  </header>
+
+
+  <main class="page">
+    <div class="page-head">
+      <div>
+        <p class="eyebrow">Architecture · for the engineer who builds the real app</p>
+        <h1>How Chalkroom would run on Supabase</h1>
+        <p>Ten topics, in plain language. The prototype is static and fakes everything live. This page is the plan for the real thing. Prices and plan limits change, so every number here is a planning estimate to check before you commit.</p>
+      </div>
+    </div>
+
+    <nav aria-label="Topics on this page" class="toc" style="margin-bottom:var(--s6)">
+      <a href="#stack">1 Stack</a><a href="#system">2 System</a><a href="#realtime">3 Realtime</a><a href="#data">4 Data model</a><a href="#joining">5 Joining</a><a href="#transcription">6 Transcription</a><a href="#hosting">7 Hosting</a><a href="#scale">8 Scale and cost</a><a href="#privacy">9 Security and privacy</a><a href="#plan">10 Build plan</a>
+    </nav>
+
+    <div class="arch">
+
+      <section id="stack" aria-labelledby="h-stack">
+        <h2 id="h-stack"><span class="n">1</span>Stack and why</h2>
+        <p class="lede">Recommendation: Expo (React Native) with React Native Web, one TypeScript codebase for iOS, Android and the web, with Supabase as the backend.</p>
+        <ul>
+          <li><strong>Why Expo.</strong> One codebase ships to both app stores and the web. Native camera access makes QR scanning reliable. EAS Build and EAS Update handle store builds and fast fixes.</li>
+          <li><strong>Trade-off.</strong> Board drawing and handwriting need care on low-end Android. Use a native canvas module (for example react-native-skia) for ink and keep text layout simple.</li>
+          <li><strong>Alternative: a web app wrapped with Capacitor.</strong> Fastest route, and the prototype's code carries over. Weaker on drawing performance and on store reviewer expectations for a live-classroom app. Choose it only if the MVP is web-first.</li>
+          <li><strong>Backend.</strong> Supabase for Auth, Postgres, Realtime, Storage and Edge Functions. Everything sits behind Row Level Security, so the client can't read data it shouldn't.</li>
+        </ul>
+      </section>
+
+      <section id="system" aria-labelledby="h-system">
+        <h2 id="h-system"><span class="n">2</span>System diagram</h2>
+        <figure class="fig" style="margin:0">
+          <svg viewBox="0 0 900 430" role="img" aria-labelledby="sys-title sys-desc">
+            <title id="sys-title">System diagram</title>
+            <desc id="sys-desc">Clients connect to hosting and to Supabase. Supabase contains Auth, Postgres, Realtime, Storage and Edge Functions. Teacher audio goes to a speech-to-text provider with a short-lived token.</desc>
+            <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#23211E"/></marker></defs>
+            <g font-family="Figtree, sans-serif" font-size="14" fill="#23211E" stroke="#23211E" stroke-width="2">
+              <rect x="20" y="40" width="170" height="120" rx="14" fill="#CFE7E1"/>
+              <text x="105" y="72" text-anchor="middle" font-weight="800" stroke="none">Clients</text>
+              <text x="105" y="98" text-anchor="middle" stroke="none">iOS · Android</text>
+              <text x="105" y="120" text-anchor="middle" stroke="none">Web (teacher and student)</text>
+
+              <rect x="20" y="220" width="170" height="90" rx="14" fill="#F7E7BD"/>
+              <text x="105" y="252" text-anchor="middle" font-weight="800" stroke="none">Hosting + CDN</text>
+              <text x="105" y="276" text-anchor="middle" stroke="none">static web app</text>
+
+              <rect x="270" y="20" width="410" height="330" rx="18" fill="#FCFBF7"/>
+              <text x="475" y="48" text-anchor="middle" font-weight="800" stroke="none">Supabase project</text>
+              <rect x="295" y="70" width="170" height="66" rx="12" fill="#F4D5DC"/>
+              <text x="380" y="100" text-anchor="middle" stroke="none" font-weight="700">Auth</text>
+              <text x="380" y="122" text-anchor="middle" stroke="none" font-size="12">anonymous students</text>
+              <rect x="485" y="70" width="170" height="66" rx="12" fill="#D5E2F4"/>
+              <text x="570" y="100" text-anchor="middle" stroke="none" font-weight="700">Postgres + RLS</text>
+              <text x="570" y="122" text-anchor="middle" stroke="none" font-size="12">source of truth</text>
+              <rect x="295" y="160" width="170" height="66" rx="12" fill="#F8DCCB"/>
+              <text x="380" y="190" text-anchor="middle" stroke="none" font-weight="700">Realtime</text>
+              <text x="380" y="212" text-anchor="middle" stroke="none" font-size="12">Broadcast · Presence</text>
+              <rect x="485" y="160" width="170" height="66" rx="12" fill="#E9E0F0"/>
+              <text x="570" y="190" text-anchor="middle" stroke="none" font-weight="700">Storage</text>
+              <text x="570" y="212" text-anchor="middle" stroke="none" font-size="12">snapshots, exports</text>
+              <rect x="390" y="250" width="200" height="66" rx="12" fill="#E4EFD9"/>
+              <text x="490" y="280" text-anchor="middle" stroke="none" font-weight="700">Edge Functions</text>
+              <text x="490" y="302" text-anchor="middle" stroke="none" font-size="12">join, tokens, webhooks</text>
+
+              <rect x="730" y="70" width="150" height="90" rx="14" fill="#FFFFFF"/>
+              <text x="805" y="102" text-anchor="middle" stroke="none" font-weight="800">Speech-to-text</text>
+              <text x="805" y="124" text-anchor="middle" stroke="none" font-size="12">streaming provider</text>
+              <rect x="730" y="250" width="150" height="66" rx="14" fill="#FFFFFF"/>
+              <text x="805" y="280" text-anchor="middle" stroke="none" font-weight="800">Email / push</text>
+              <text x="805" y="302" text-anchor="middle" stroke="none" font-size="12">teacher notices</text>
+            </g>
+            <g stroke="#23211E" stroke-width="2" fill="none" marker-end="url(#arr)">
+              <path d="M190 100 H270"/>
+              <path d="M105 160 V220"/>
+              <path d="M190 120 C230 120 240 200 290 220"/>
+              <path d="M380 136 V160"/>
+              <path d="M490 136 V160"/>
+              <path d="M570 226 V250" stroke-dasharray="0"/>
+              <path d="M680 120 H730" stroke-dasharray="6 5"/>
+              <path d="M680 200 C700 240 700 260 730 275" stroke-dasharray="6 5"/>
+            </g>
+            <g font-family="Figtree, sans-serif" font-size="12" fill="#14594C" stroke="none">
+              <text x="690" y="112">teacher audio, direct, short-lived key</text>
+              <text x="690" y="300">alerts</text>
+            </g>
+          </svg>
+          <figcaption>Teacher audio goes straight to the speech-to-text provider with a token minted by an Edge Function. The audio never passes through a server of ours in the MVP.</figcaption>
+        </figure>
+      </section>
+
+      <section id="realtime" aria-labelledby="h-realtime">
+        <h2 id="h-realtime"><span class="n">3</span>Realtime design</h2>
+        <p>One Realtime channel per class session, named <code>class:&lt;session_id&gt;</code>. Each message type goes over the mechanism that fits it.</p>
+        <div class="table-wrap" style="margin-top:12px"><table>
+          <thead><tr><th>Mechanism</th><th>What goes over it</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Broadcast</strong></td><td>Board writing deltas, teacher pointer position, live caption text, area visibility changes</td><td>Short-lived and high-rate. Nothing needs to be stored.</td></tr>
+            <tr><td><strong>Presence</strong></td><td>Who is online, their role, display name, when they joined</td><td>Built for "who is here" state. Drops automatically on disconnect.</td></tr>
+            <tr><td><strong>Postgres Changes</strong></td><td>Questions, lesson notes, board items, final transcript segments</td><td>Must survive a refresh and be queryable. Listeners get rows that RLS allows them to see.</td></tr>
+          </tbody>
+        </table></div>
+        <p style="margin-top:14px"><strong>Example payloads.</strong></p>
+        <pre><code>// Broadcast "board.write": one batch of pen or text deltas, every 100–150 ms
+{ "type": "board.write", "seq": 1841, "sender": "teacher",
+  "ops": [ { "id": "b_203", "kind": "text", "x": 30, "y": 112, "chars": "6CO" } ] }
+
+// Broadcast "caption.partial" and "caption.final"
+{ "type": "caption.final", "seq": 1844, "t_ms": 58210, "text": "The light reactions happen in the thylakoid." }
+
+// Broadcast "areas.visibility": the teacher toggles an area
+{ "type": "areas.visibility", "seq": 1850, "mode": "grid", "hidden": ["br"] }
+
+// Presence "student" state
+{ "role": "student", "display_name": "Priya", "joined_at": "2026-11-07T09:41:03Z" }
+
+// Postgres change: a new row in questions (only the teacher's subscription sees all of them)
+{ "table": "questions", "event": "INSERT",
+  "new": { "id": "q_881", "session_id": "s_12", "student_id": "u_77", "text": "…", "snapshot_path": "snap/q_881.svg" } }</code></pre>
+        <ul style="margin-top:14px">
+          <li><strong>Ordering.</strong> Each sender numbers messages with <code>seq</code>. Clients apply Broadcast ops in order per sender and drop duplicates. Board truth comes from Postgres, not from message order.</li>
+          <li><strong>Reconnecting.</strong> Exponential backoff with jitter (0.5 s, doubling, capped at 15 s). On rejoin, reload the board snapshot, then resume from the last <code>seq</code> seen.</li>
+          <li><strong>Late joiners.</strong> A student who joins mid-class calls one RPC that returns current board items, visible areas, the latest slide and the last 60 seconds of captions. Then they subscribe.</li>
+          <li><strong>Throttling and batching.</strong> Pointer position at 10–20 Hz at most. Text is sent as 100–150 ms chunks, not per key press. Keep each message under 4 KB.</li>
+          <li><strong>Limits.</strong> Check the current Realtime message-rate and payload limits for your plan in the Supabase docs before the load test. Budget with a safety margin of 2× the design rate.</li>
+        </ul>
+      </section>
+
+      <section id="data" aria-labelledby="h-data">
+        <h2 id="h-data"><span class="n">4</span>Data model</h2>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Table</th><th>Key columns</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td><code>classes</code></td><td>id, teacher_id, name, school_id</td><td>A teacher's recurring class.</td></tr>
+            <tr><td><code>sessions</code></td><td>id, class_id, join_code, started_at, ended_at, mode (board / present), join_expires_at</td><td>One live lesson.</td></tr>
+            <tr><td><code>participants</code></td><td>id, session_id, user_id (anonymous ok), role, display_name, joined_at, left_at</td><td>Students never see each other's user_id.</td></tr>
+            <tr><td><code>boards</code></td><td>id, session_id, mode (whole / halves / grid)</td><td>One board per session, plus later pages.</td></tr>
+            <tr><td><code>board_areas</code></td><td>id, board_id, label, x, y, w, h, visible</td><td>Visibility is a column, so RLS can check it.</td></tr>
+            <tr><td><code>board_items</code></td><td>id, board_id, kind (text / stroke), payload jsonb, area_id, seq</td><td>Stored as written. Late joiners read these.</td></tr>
+            <tr><td><code>notes</code></td><td>id, class_id, title, body, position, pushed_at</td><td>Private to the teacher until pushed or shown.</td></tr>
+            <tr><td><code>questions</code></td><td>id, session_id, participant_id, text, snapshot_path, ring jsonb, status (new / answered), pinned, created_at</td><td>Snapshot is a file in Storage, never on the board.</td></tr>
+            <tr><td><code>transcript_segments</code></td><td>id, session_id, t_ms, text, speaker, created_at</td><td>Final segments only. Retention rule below.</td></tr>
+          </tbody>
+        </table></div>
+        <p style="margin-top:14px"><strong>Row Level Security (summary).</strong></p>
+        <ul>
+          <li><strong>Students see only visible areas.</strong> <code>board_items</code> is readable by a student only when its <code>area_id</code> is visible, or it has no area.</li>
+          <li><strong>Only the teacher sees all questions.</strong> A <code>questions</code> row is readable by the session's teacher.</li>
+          <li><strong>Students see only their own questions.</strong> Readable when <code>participant_id</code> matches the caller's participant.</li>
+          <li><strong>Notes are teacher-only</strong> until <code>pushed_at</code> is set, then they're readable as board items.</li>
+          <li>Anonymous students can't read any <code>classes</code> or <code>notes</code> rows, and can't write to <code>sessions</code>.</li>
+        </ul>
+      </section>
+
+      <section id="joining" aria-labelledby="h-joining">
+        <h2 id="h-joining"><span class="n">5</span>Joining</h2>
+        <ul>
+          <li><strong>Join codes.</strong> Eight characters from an alphabet without look-alikes (no 0/O, 1/I/L). Unique per active session, generated server-side.</li>
+          <li><strong>Expiry.</strong> A code expires at the scheduled end of the session plus two hours, and can be rotated mid-class by the teacher. A teacher can also lock the room, so new joins are refused.</li>
+          <li><strong>QR deep links.</strong> The QR encodes <code>https://chalkroom.app/j/&lt;code&gt;</code>. With universal links (iOS, <code>apple-app-site-association</code>) and app links (Android, <code>assetlinks.json</code>) the app opens directly. Otherwise the same URL serves the web join page.</li>
+          <li><strong>Anonymous sign-in for students.</strong> The Edge Function <code>join</code> validates the code, calls anonymous sign-in, and creates a <code>participants</code> row with the display name. No email, no password.</li>
+          <li><strong>Display names.</strong> Teacher-moderated, 20 characters, no duplicates within a class.</li>
+        </ul>
+      </section>
+
+      <section id="transcription" aria-labelledby="h-transcription">
+        <h2 id="h-transcription"><span class="n">6</span>Live transcription</h2>
+        <figure class="fig" style="margin:0 0 14px">
+          <svg viewBox="0 0 900 150" role="img" aria-labelledby="stt-title">
+            <title id="stt-title">Transcription path from microphone to captions</title>
+            <g font-family="Figtree, sans-serif" font-size="14" font-weight="700" fill="#23211E" stroke="#23211E" stroke-width="2">
+              <rect x="10" y="50" width="140" height="56" rx="12" fill="#CFE7E1"/><text x="80" y="84" text-anchor="middle" stroke="none">Teacher mic</text>
+              <rect x="190" y="50" width="160" height="56" rx="12" fill="#F8DCCB"/><text x="270" y="84" text-anchor="middle" stroke="none">Audio, 16 kHz</text>
+              <rect x="390" y="50" width="170" height="56" rx="12" fill="#FFFFFF"/><text x="475" y="84" text-anchor="middle" stroke="none">STT stream</text>
+              <rect x="600" y="50" width="130" height="56" rx="12" fill="#D5E2F4"/><text x="665" y="84" text-anchor="middle" stroke="none">Broadcast</text>
+              <rect x="770" y="50" width="120" height="56" rx="12" fill="#F7E7BD"/><text x="830" y="84" text-anchor="middle" stroke="none">Class</text>
+            </g>
+            <g stroke="#23211E" stroke-width="2" fill="none"><path d="M150 78 H190"/><path d="M350 78 H390"/><path d="M560 78 H600"/><path d="M730 78 H770"/></g>
+            <text x="475" y="130" text-anchor="middle" font-family="Figtree, sans-serif" font-size="13" fill="#4E4a42">Final segments are also written to transcript_segments in batches of about 10 seconds.</text>
+          </svg>
+          <figcaption>Interim text is sent to the class as it arrives and replaced when the final result lands.</figcaption>
+        </figure>
+        <ul>
+          <li><strong>Deepgram.</strong> Streaming, low latency, priced per minute of audio. A good default to test first. Confirm current rates.</li>
+          <li><strong>AssemblyAI.</strong> Streaming with a strong accuracy record and easy speaker and language options. Per-hour pricing. Slightly higher per-minute cost than Deepgram for basic English. Confirm current rates.</li>
+          <li><strong>Google Cloud Speech-to-Text.</strong> Broadest language coverage and tight integration if you're already on Google Cloud. Typically the highest per-minute list price. Confirm current rates.</li>
+          <li><strong>Cost sanity check.</strong> A 45-minute class is 45 billed minutes of streaming. At roughly half a cent per minute, that's about 25 cents per class. Verify before budgeting.</li>
+          <li><strong>Storage.</strong> Final text only, by default. Raw audio is never stored. Teachers can opt in to keep audio for a fixed period, and transcripts follow the retention rule in topic 9.</li>
+        </ul>
+      </section>
+
+      <section id="hosting" aria-labelledby="h-hosting">
+        <h2 id="h-hosting"><span class="n">7</span>Hosting and deployment</h2>
+        <ul>
+          <li><strong>Web app.</strong> Static build on Cloudflare Pages or Vercel, served from the CDN. Preview deploys per pull request.</li>
+          <li><strong>Supabase plan.</strong> Pro from the first pilot. The free plan pauses inactive projects and has lower Realtime connection limits, which a live classroom will hit quickly.</li>
+          <li><strong>Edge Functions are enough</strong> for join, token minting, webhooks and moderation hooks.</li>
+          <li><strong>A small separate server</strong> (Node WebSocket service or a worker on Fly.io, Render or Railway) is needed only when one of these happens: a speech provider needs a server-side relay, per-class server state outgrows Edge Function limits, or you need long-lived connections that Edge Functions don't support well. Plan for it around month three.</li>
+          <li><strong>Environments.</strong> Three Supabase projects: dev, staging, prod. Migrations via the Supabase CLI, checked in and applied by CI. Seed data for dev only.</li>
+          <li><strong>CI.</strong> GitHub Actions: type-check, lint, unit tests, a Realtime smoke test against staging, then deploy.</li>
+          <li><strong>App store builds.</strong> EAS Build for iOS and Android, TestFlight and Play internal testing for each release, EAS Update for JavaScript-only fixes. Expect store review to ask about child safety and data collection.</li>
+        </ul>
+      </section>
+
+      <section id="scale" aria-labelledby="h-scale">
+        <h2 id="h-scale"><span class="n">8</span>Scale, cost and limits</h2>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Load</th><th>One class of 30</th><th>1,000 classes at once</th></tr></thead>
+          <tbody>
+            <tr><td>Realtime connections</td><td>31 (one per device)</td><td>About 31,000 concurrent. This is the first thing that breaks.</td></tr>
+            <tr><td>Broadcast messages</td><td>Peaks of 20–50 per second while writing, averaging a few per second</td><td>Tens of thousands per second at peak. Batching is essential.</td></tr>
+            <tr><td>Database writes</td><td>A few questions, board items and transcript batches per minute</td><td>Several thousand writes per minute. Fine for Postgres with indexes and batching.</td></tr>
+            <tr><td>Speech-to-text streams</td><td>1 stream for 45 minutes</td><td>1,000 concurrent streams. Provider concurrency limits and cost dominate.</td></tr>
+            <tr><td>Storage</td><td>Snapshots of about 30 KB each</td><td>Manageable. Delete snapshots with the session after the retention window.</td></tr>
+          </tbody>
+        </table></div>
+        <p style="margin-top:14px"><strong>What breaks first, in order:</strong> (1) Realtime concurrent connections and plan limits, so buy the add-on early. (2) Postgres Changes fan-out, because RLS is checked per subscriber, so move high-rate events to Broadcast. (3) Speech-to-text concurrency and spend, so cap streams per school. Costs at this scale are dominated by Realtime connections and transcription, not by Postgres. Use the provider's pricing page and the Supabase pricing page for real numbers.</p>
+      </section>
+
+      <section id="privacy" aria-labelledby="h-privacy">
+        <h2 id="h-privacy"><span class="n">9</span>Security and privacy</h2>
+        <p class="lede">Students may be minors, so privacy is a launch requirement, not a later task.</p>
+        <ul>
+          <li><strong>COPPA (under 13, US).</strong> Collect as little as possible from students. Use anonymous auth and display names only, with no email or persistent identifier shared with third parties. Use schools as the consent route where the school authorises the service, and get verifiable parental consent for direct-to-consumer use. Get a children's privacy review before any marketing to families.</li>
+          <li><strong>FERPA (US, education records).</strong> Schools that receive federal funds can share student records with vendors that act as "school officials" under a data-use agreement. Under that agreement you may use the data only to provide the service, may not sell it or use it for ads, and must delete it on request.</li>
+          <li><strong>Data retention.</strong> Default: transcripts and questions kept for one school year, then deleted. Snapshots deleted with the session. Schools can set shorter periods. Account deletion removes all personal data within 30 days.</li>
+          <li><strong>Moderation of student questions.</strong> Only the teacher sees questions. Add a simple text filter on arrival, a report button, rate limits per student, and an admin audit log. Students never see each other's questions or names outside the class roster.</li>
+          <li><strong>Security basics.</strong> Row Level Security tested in CI for every table (a test user can't read another student's rows). Edge Function secrets in Supabase vault. Signed URLs for snapshots, expiring in minutes. No PII in logs.</li>
+        </ul>
+      </section>
+
+      <section id="plan" aria-labelledby="h-plan">
+        <h2 id="h-plan"><span class="n">10</span>Build plan</h2>
+        <ol>
+          <li><strong>Phase 0 · Prototype (done).</strong> This static demo. Used for founder reviews and teacher interviews.</li>
+          <li><strong>Phase 1 · MVP (about 8 weeks).</strong> Anonymous join by code and QR, teacher whiteboard with typed text, board areas with visibility, questions inbox with snapshots, roster and presence. One pilot school, web first.</li>
+          <li><strong>Phase 2 · Present and captions (about 6 weeks).</strong> Lesson notes synced to the board, Present mode, live captions with a streaming provider, transcript storage.</li>
+          <li><strong>Phase 3 · v1 (about 8 weeks).</strong> iOS and Android builds, school accounts and admin, COPPA and FERPA paperwork, retention controls, store launch.</li>
+        </ol>
+        <h3 style="margin-top:20px">Open decisions for the founder</h3>
+        <div class="table-wrap" style="margin-top:10px"><table>
+          <thead><tr><th>Decision</th><th>Options</th><th>Recommendation</th></tr></thead>
+          <tbody>
+            <tr><td>Client stack</td><td>Expo with React Native Web · Capacitor around a web app</td><td>Expo. One codebase, store-ready, better ink performance.</td></tr>
+            <tr><td>Speech provider</td><td>Deepgram · AssemblyAI · Google Cloud</td><td>Deepgram to start, with an abstraction so you can switch. Re-test cost at 100 classes.</td></tr>
+            <tr><td>Consent route</td><td>School-authorised only · direct to parents with verifiable consent</td><td>School-authorised first. It's simpler to run and matches how classrooms buy software.</td></tr>
+            <tr><td>Pricing</td><td>Per teacher per month · per school per year</td><td>Per school per year for the pilot. Teachers can't buy it without the school's agreement anyway.</td></tr>
+            <tr><td>Video of the teacher</td><td>None in MVP · live camera · recorded clips</td><td>None in MVP. Board and voice carry the lesson, and video adds privacy and cost.</td></tr>
+          </tbody>
+        </table></div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-foot">
+    <span>Chalkroom prototype. Every live behaviour is scripted.</span>
+    <span>Works offline except for the fonts.</span>
+  </footer>
+</body>
+</html>

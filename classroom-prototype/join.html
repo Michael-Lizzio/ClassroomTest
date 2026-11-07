@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Join · Chalkroom prototype</title>
+  <meta name="description" content="Students join with a QR code or a link, enter a display name, and land in the class. No account needed.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Figtree:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="Chalkroom overview">
+      <svg viewBox="0 0 34 34" aria-hidden="true"><rect x="2" y="4" width="30" height="22" rx="4" fill="#FCFBF7" stroke="#23211E" stroke-width="2.5"/><path d="M9 18 C12 10 15 22 18 14 S24 12 26 10" fill="none" stroke="#D9622B" stroke-width="2.4" stroke-linecap="round"/><rect x="12" y="27" width="14" height="3" rx="1.5" fill="#23211E"/></svg>
+      Chalkroom
+    </a>
+    <nav class="site-nav" aria-label="Demos">
+      <ul>
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="join.html" aria-current="page">Join</a></li>
+        <li><a href="classroom.html">Classroom</a></li>
+        <li><a href="teacher.html">Teacher console</a></li>
+        <li><a href="ask.html">Ask</a></li>
+        <li><a href="present.html">Present</a></li>
+        <li><a href="devices.html">Devices</a></li>
+        <li><a href="architecture.html">Architecture</a></li>
+      </ul>
+    </nav>
+    <span class="badge">Prototype · simulated data</span>
+  </header>
+
+  <main class="page">
+    <div class="page-head">
+      <div>
+        <p class="eyebrow">Demo 1 · Join</p>
+        <h1>Scan, name, and you're in</h1>
+        <p>Students need no account. The teacher shows a QR code or a link. Students enter a display name and land in the room.</p>
+      </div>
+    </div>
+
+    <div class="split-ask" style="grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr); align-items:center">
+      <div class="student-col">
+        <p class="eyebrow" style="margin:0">Phone · scan the code</p>
+        <div class="phone" aria-label="Phone showing the join flow">
+          <div class="phone-notch" aria-hidden="true"></div>
+          <div class="phone-screen">
+            <div class="phone-status" aria-hidden="true"><span>9:41</span><span>100%</span></div>
+            <div class="phone-body" id="phone-body">
+              <section class="step-screen is-on" data-step="scan" aria-label="Step 1: scan the code">
+                <h3>Scan to join</h3>
+                <div class="qr-box" id="qr-box">
+                  <div class="scan-line" id="scan-line"></div>
+                </div>
+                <p class="muted" style="text-align:center;font-size:var(--fs-sm)">Point your camera at the code on the board.</p>
+              </section>
+
+              <section class="step-screen" data-step="name" aria-label="Step 2: enter a display name">
+                <h3>What should we call you?</h3>
+                <div class="field">
+                  <label for="phone-name">Display name</label>
+                  <input class="input" id="phone-name" name="display-name" autocomplete="nickname" maxlength="20" placeholder="For example, Priya" value="">
+                </div>
+                <p class="muted" style="font-size:var(--fs-sm)">Your teacher sees this name on the roster.</p>
+                <button class="btn btn-primary" id="phone-join" type="button" style="margin-top:auto">Join class</button>
+              </section>
+
+              <section class="step-screen" data-step="joining" aria-label="Step 3: joining" aria-live="polite">
+                <div style="margin:auto;text-align:center">
+                  <div class="spinner" aria-hidden="true"></div>
+                  <h3>Joining Biology 101…</h3>
+                  <p class="muted" style="font-size:var(--fs-sm)">Ms. Okafor · Room 214</p>
+                </div>
+              </section>
+
+              <section class="step-screen" data-step="inclass" aria-label="Step 4: in class">
+                <div class="console-title" style="justify-content:space-between">
+                  <span class="chip chip-done">In class</span>
+                  <span class="muted" style="font-size:var(--fs-sm)">9 students online</span>
+                </div>
+                <div class="phone-board-wrap" id="phone-board" style="border:1.5px solid var(--ink);border-radius:12px;overflow:hidden"></div>
+                <p style="font-size:var(--fs-sm)">Tap or circle the board to ask about it.</p>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="student-col" style="justify-items:stretch">
+        <p class="eyebrow" style="margin:0">Desktop · open the link</p>
+        <div class="browser" aria-label="Desktop browser opening the join link">
+          <div class="browser-bar">
+            <div class="browser-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+            <div class="browser-url" id="browser-url" aria-live="off"></div>
+          </div>
+          <div class="browser-body" style="padding:24px;display:grid;gap:16px">
+            <section id="d-form" hidden aria-label="Desktop join form">
+              <p class="eyebrow" style="margin:0">Chalkroom · join</p>
+              <h2 style="margin-top:6px">Join Biology 101: Photosynthesis</h2>
+              <p class="muted" style="margin-top:6px">Ms. Naomi Okafor · Room 214</p>
+              <div class="field" style="margin-top:16px;max-width:360px">
+                <label for="desk-name">Display name</label>
+                <input class="input" id="desk-name" name="desk-display-name" autocomplete="nickname" maxlength="20" placeholder="For example, Priya">
+              </div>
+              <div style="margin-top:14px"><button class="btn btn-primary" id="desk-join" type="button">Continue in browser</button></div>
+            </section>
+            <section id="d-room" hidden aria-label="Desktop class view">
+              <div class="console-title" style="justify-content:space-between">
+                <h2>You're in, Priya</h2>
+                <span class="chip chip-done">In class</span>
+              </div>
+              <div id="desk-room"></div>
+              <p class="muted" style="font-size:var(--fs-sm)">Everything you can do on the phone works here too. The room adapts to the window.</p>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-bar" aria-label="Demo controls" style="margin-top:32px">
+      <span class="demo-title">Scripted demo</span>
+      <button class="btn btn-sm" type="button" data-action="play">Play</button>
+      <button class="btn btn-sm" type="button" data-action="restart">Restart</button>
+      <input type="range" aria-label="Timeline position" value="0">
+      <span class="time">0:00 / 0:14</span>
+      <p class="scene-cue" id="cue">Press Play. The phone and the desktop show the same join, side by side.</p>
+    </div>
+  </main>
+
+  <footer class="site-foot">
+    <span>Chalkroom prototype. Every live behaviour is scripted.</span>
+    <span>Works offline except for the fonts.</span>
+  </footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/chalk.js"></script>
+  <script src="assets/js/demo-engine.js"></script>
+  <script src="assets/js/join.js"></script>
+</body>
+</html>

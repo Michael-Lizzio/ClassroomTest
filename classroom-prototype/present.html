@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Present mode · Chalkroom prototype</title>
+  <meta name="description" content="The projector screen comes down over the whiteboard, slides come from the teacher notes, and captions run along the bottom.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Figtree:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="Chalkroom overview">
+      <svg viewBox="0 0 34 34" aria-hidden="true"><rect x="2" y="4" width="30" height="22" rx="4" fill="#FCFBF7" stroke="#23211E" stroke-width="2.5"/><path d="M9 18 C12 10 15 22 18 14 S24 12 26 10" fill="none" stroke="#D9622B" stroke-width="2.4" stroke-linecap="round"/><rect x="12" y="27" width="14" height="3" rx="1.5" fill="#23211E"/></svg>
+      Chalkroom
+    </a>
+    <nav class="site-nav" aria-label="Demos">
+      <ul>
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="join.html">Join</a></li>
+        <li><a href="classroom.html">Classroom</a></li>
+        <li><a href="teacher.html">Teacher console</a></li>
+        <li><a href="ask.html">Ask</a></li>
+        <li><a href="present.html" aria-current="page">Present</a></li>
+        <li><a href="devices.html">Devices</a></li>
+        <li><a href="architecture.html">Architecture</a></li>
+      </ul>
+    </nav>
+    <span class="badge">Prototype · simulated data</span>
+  </header>
+
+
+  <main class="page">
+    <div class="page-head">
+      <div>
+        <p class="eyebrow">Demo 5 · Present mode</p>
+        <h1>The screen comes down, the notes go up</h1>
+        <p>The teacher switches to Present. A projector screen rolls down over the whiteboard with a small settle at the bottom. Slides come from the lesson notes, and captions type out along the bottom, timed to the transcript.</p>
+      </div>
+    </div>
+
+    <section class="present-stage" aria-label="Classroom in present mode">
+      <div class="room-frame" id="present-room"></div>
+
+      <div class="caption-bar" id="caption-bar">
+        <span class="caption-label">Captions</span>
+        <p class="caption-text" id="caption-text" aria-live="polite"></p>
+      </div>
+
+      <div class="slide-controls">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+          <button class="btn" type="button" id="prev-slide">← Previous</button>
+          <span class="slide-count" id="slide-count" aria-live="polite">Slide 1 of 6</span>
+          <button class="btn" type="button" id="next-slide">Next →</button>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+          <button class="btn" type="button" id="toggle-screen" aria-pressed="false">Pull screen down</button>
+          <button class="btn" type="button" id="toggle-captions" aria-pressed="true">Captions on</button>
+        </div>
+      </div>
+
+      <div class="slide-strip" id="slide-strip" aria-label="Slides"></div>
+    </section>
+
+    <div class="demo-bar" aria-label="Demo controls" style="margin-top:24px">
+      <span class="demo-title">Scripted demo</span>
+      <button class="btn btn-sm" type="button" data-action="play">Play</button>
+      <button class="btn btn-sm" type="button" data-action="restart">Restart</button>
+      <input type="range" aria-label="Timeline position" value="0">
+      <span class="time">0:00 / 1:00</span>
+      <p class="scene-cue" id="cue">Press Play. The demo plays the two-minute transcript at double speed.</p>
+    </div>
+  </main>
+
+  <footer class="site-foot">
+    <span>Chalkroom prototype. Every live behaviour is scripted.</span>
+    <span>Works offline except for the fonts.</span>
+  </footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/chalk.js"></script>
+  <script src="assets/js/demo-engine.js"></script>
+  <script src="assets/js/present.js"></script>
+</body>
+</html>

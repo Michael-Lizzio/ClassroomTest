@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Every device · Chalkroom prototype</title>
+  <meta name="description" content="The same class on an iPhone, an Android phone and a desktop browser. The layout adapts to each.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Figtree:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="Chalkroom overview">
+      <svg viewBox="0 0 34 34" aria-hidden="true"><rect x="2" y="4" width="30" height="22" rx="4" fill="#FCFBF7" stroke="#23211E" stroke-width="2.5"/><path d="M9 18 C12 10 15 22 18 14 S24 12 26 10" fill="none" stroke="#D9622B" stroke-width="2.4" stroke-linecap="round"/><rect x="12" y="27" width="14" height="3" rx="1.5" fill="#23211E"/></svg>
+      Chalkroom
+    </a>
+    <nav class="site-nav" aria-label="Demos">
+      <ul>
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="join.html">Join</a></li>
+        <li><a href="classroom.html">Classroom</a></li>
+        <li><a href="teacher.html">Teacher console</a></li>
+        <li><a href="ask.html">Ask</a></li>
+        <li><a href="present.html">Present</a></li>
+        <li><a href="devices.html" aria-current="page">Devices</a></li>
+        <li><a href="architecture.html">Architecture</a></li>
+      </ul>
+    </nav>
+    <span class="badge">Prototype · simulated data</span>
+  </header>
+
+
+  <main class="page">
+    <div class="page-head">
+      <div>
+        <p class="eyebrow">Demo 6 · Every device</p>
+        <h1>One class, three screens</h1>
+        <p>On a portrait phone the board is on top with the controls below. On desktop the whole room is visible. All three run the same timeline, so the board looks the same everywhere.</p>
+      </div>
+    </div>
+
+    <div class="device-grid">
+      <figure style="margin:0">
+        <div class="dev-phone">
+          <div class="phone">
+            <div class="phone-notch" aria-hidden="true"></div>
+            <div class="phone-screen">
+              <div class="phone-status" aria-hidden="true"><span>9:41</span><span>100%</span></div>
+              <div class="phone-body dev-phone-stack">
+                <div class="phone-board-wrap" id="ios-board" style="padding:4px"></div>
+                <div style="padding:8px 12px;font-size:var(--fs-sm);color:var(--ink-2)" id="ios-note">Board on top. Circle anything to ask.</div>
+                <div class="dev-controls">
+                  <span class="chip chip-done">Live</span>
+                  <button class="btn" type="button" tabindex="-1">Ask</button>
+                  <button class="btn" type="button" tabindex="-1">Captions</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption class="device-cap">iPhone<span>Portrait: board on top, controls below</span></figcaption>
+      </figure>
+
+      <figure style="margin:0">
+        <div class="dev-phone">
+          <div class="phone android">
+            <div class="phone-notch" aria-hidden="true" style="width:14px;height:14px;border-radius:50%;top:10px"></div>
+            <div class="phone-screen" style="border-radius:24px">
+              <div class="phone-status" aria-hidden="true"><span>9:41</span><span>Wi-Fi · 100%</span></div>
+              <div class="phone-body dev-phone-stack">
+                <div class="phone-board-wrap" id="android-board" style="padding:4px"></div>
+                <div style="padding:8px 12px;font-size:var(--fs-sm);color:var(--ink-2)" id="android-note">Same board, same timeline, Android chrome.</div>
+                <div class="dev-controls">
+                  <span class="chip chip-done">Live</span>
+                  <button class="btn" type="button" tabindex="-1">Ask</button>
+                  <button class="btn" type="button" tabindex="-1">Captions</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption class="device-cap">Android<span>Portrait, with the system bar</span></figcaption>
+      </figure>
+
+      <figure style="margin:0">
+        <div class="browser" style="width:100%">
+          <div class="browser-bar">
+            <div class="browser-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+            <div class="browser-url">chalkroom.app/j/BIO-7Q4</div>
+          </div>
+          <div class="browser-body">
+            <div id="desk-room"></div>
+            <div class="dev-roster" style="justify-content:space-between">
+              <span class="chip chip-done">Live</span>
+              <span id="desk-note" style="font-size:var(--fs-sm)">Whole room visible. Sidebar on wide screens.</span>
+            </div>
+          </div>
+        </div>
+        <figcaption class="device-cap">Desktop browser<span>Landscape: the whole room</span></figcaption>
+      </figure>
+    </div>
+
+    <div class="demo-bar" aria-label="Demo controls" style="margin-top:32px">
+      <span class="demo-title">Scripted demo</span>
+      <button class="btn btn-sm" type="button" data-action="play">Play</button>
+      <button class="btn btn-sm" type="button" data-action="restart">Restart</button>
+      <input type="range" aria-label="Timeline position" value="0">
+      <span class="time">0:00 / 0:20</span>
+      <p class="scene-cue" id="cue">Press Play. All three devices run the same class.</p>
+    </div>
+  </main>
+
+  <footer class="site-foot">
+    <span>Chalkroom prototype. Every live behaviour is scripted.</span>
+    <span>Works offline except for the fonts.</span>
+  </footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/chalk.js"></script>
+  <script src="assets/js/demo-engine.js"></script>
+  <script src="assets/js/devices.js"></script>
+</body>
+</html>

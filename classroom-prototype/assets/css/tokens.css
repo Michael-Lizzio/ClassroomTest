@@ -1,0 +1,75 @@
+/* Chalkroom design tokens. Warm flat illustration with chalk and marker accents. */
+:root {
+  /* Colour: paper and ink */
+  --paper: #F5EFE3;
+  --paper-2: #EDE4D0;
+  --paper-3: #E3D7BE;
+  --ink: #23211E;
+  --ink-2: #4E4a42;
+  --ink-3: #6F6A60;
+  --white: #FFFFFF;
+
+  /* Colour: room */
+  --wall: #EADCC3;
+  --wall-2: #D9C6A5;
+  --floor: #D6B68A;
+  --floor-2: #C9A476;
+  --wood: #A97A4E;
+  --board: #FCFBF7;
+  --board-frame: #A7B0AA;
+  --board-tray: #7F8A83;
+  --window: #CFE3E6;
+
+  /* Colour: marker accents (AA on paper for text uses ink-coloured labels) */
+  --teal: #1E7566;
+  --teal-2: #CFE7E1;
+  --teal-ink: #14594C;
+  --orange: #D9622B;
+  --orange-2: #F8DCCB;
+  --mustard: #E8B043;
+  --mustard-2: #F7E7BD;
+  --rose: #C4506A;
+  --rose-2: #F4D5DC;
+  --blue: #2D5C9E;
+  --blue-2: #D5E2F4;
+  --green: #5E8C3A;
+
+  /* Type */
+  --font-ui: "Figtree", "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+  --font-hand: "Caveat", "Bradley Hand", "Segoe Print", cursive;
+  --fs-xs: 0.78rem;
+  --fs-sm: 0.9rem;
+  --fs-base: 1rem;
+  --fs-md: 1.125rem;
+  --fs-lg: 1.4rem;
+  --fs-xl: clamp(1.8rem, 3.2vw, 2.6rem);
+  --fs-hero: clamp(2.2rem, 5vw, 3.8rem);
+  --lh: 1.5;
+
+  /* Space */
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 12px;
+  --s4: 16px;
+  --s5: 24px;
+  --s6: 32px;
+  --s7: 48px;
+
+  /* Shape */
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 22px;
+  --r-pill: 999px;
+  --touch: 44px;
+
+  /* Elevation */
+  --shadow-1: 0 1px 0 rgba(35, 33, 30, 0.06), 0 2px 6px rgba(35, 33, 30, 0.08);
+  --shadow-2: 0 10px 28px rgba(35, 33, 30, 0.16);
+  --shadow-3: 0 24px 60px rgba(35, 33, 30, 0.22);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-settle: cubic-bezier(0.3, 1.3, 0.5, 1);
+  --dur-ui: 240ms;
+  --dur-scene: 1100ms;
+}
