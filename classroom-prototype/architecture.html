@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Architecture - Chalkboard</title>
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/app.css">
+  <style>
+    .arch-container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .arch-content {
+      flex: 1;
+      padding: var(--space-12) var(--space-6);
+      max-width: 1000px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .arch-header {
+      margin-bottom: var(--space-12);
+      text-align: center;
+      border-bottom: 2px solid var(--color-neutral-200);
+      padding-bottom: var(--space-8);
+    }
+
+    .arch-header h1 {
+      margin-bottom: var(--space-2);
+    }
+
+    .arch-header p {
+      font-size: var(--text-lg);
+      color: var(--color-neutral-600);
+    }
+
+    .section {
+      margin-bottom: var(--space-12);
+      padding-bottom: var(--space-8);
+      border-bottom: 1px solid var(--color-neutral-200);
+    }
+
+    .section h2 {
+      margin-top: 0;
+      color: var(--color-primary);
+      margin-bottom: var(--space-6);
+    }
+
+    .section-number {
+      font-size: var(--text-sm);
+      font-weight: 700;
+      color: var(--color-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: var(--space-2);
+    }
+
+    .diagram {
+      background-color: white;
+      border: 2px solid var(--color-neutral-300);
+      border-radius: var(--radius-lg);
+      padding: var(--space-8);
+      margin: var(--space-6) 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 300px;
+    }
+
+    .code-block {
+      background-color: var(--color-neutral-900);
+      color: #00ff00;
+      padding: var(--space-4);
+      border-radius: var(--radius-md);
+      overflow-x: auto;
+      font-family: 'Courier New', monospace;
+      font-size: var(--text-sm);
+      line-height: var(--line-height-normal);
+      margin: var(--space-4) 0;
+    }
+
+    .code-block.json {
+      color: #9cdcfe;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: var(--space-6) 0;
+    }
+
+    th, td {
+      padding: var(--space-4);
+      text-align: left;
+      border-bottom: 1px solid var(--color-neutral-200);
+    }
+
+    th {
+      background-color: var(--bg-tertiary);
+      font-weight: 700;
+      color: var(--color-neutral-900);
+    }
+
+    tr:hover {
+      background-color: var(--bg-tertiary);
+    }
+
+    .trade-off {
+      background-color: rgba(37, 99, 235, 0.05);
+      border-left: 4px solid var(--color-primary);
+      padding: var(--space-4);
+      border-radius: var(--radius-md);
+      margin: var(--space-4) 0;
+    }
+
+    .trade-off strong {
+      color: var(--color-primary);
+    }
+
+    .list-cols-2 {
+      columns: 2;
+      column-gap: var(--space-8);
+    }
+
+    ul {
+      margin: var(--space-4) 0;
+      padding-left: 1.5em;
+    }
+
+    li {
+      margin-bottom: var(--space-2);
+      line-height: var(--line-height-relaxed);
+    }
+
+    .architecture-svg {
+      width: 100%;
+      height: auto;
+    }
+
+    .phase-card {
+      background-color: var(--bg-tertiary);
+      padding: var(--space-6);
+      border-radius: var(--radius-lg);
+      margin-bottom: var(--space-4);
+      border-left: 4px solid var(--color-primary);
+    }
+
+    .phase-title {
+      font-weight: 700;
+      font-size: var(--text-lg);
+      margin-bottom: var(--space-2);
+      color: var(--color-neutral-900);
+    }
+
+    .phase-list {
+      list-style-position: inside;
+      margin: 0;
+      padding: 0;
+    }
+
+    .phase-list li {
+      margin-bottom: var(--space-2);
+    }
+
+    .comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-4);
+      margin: var(--space-4) 0;
+    }
+
+    .comparison-item {
+      padding: var(--space-4);
+      background-color: var(--bg-tertiary);
+      border-radius: var(--radius-md);
+    }
+
+    .comparison-item strong {
+      display: block;
+      margin-bottom: var(--space-2);
+      color: var(--color-primary);
+    }
+
+    @media (max-width: 768px) {
+      .arch-content {
+        padding: var(--space-6) var(--space-4);
+      }
+
+      .list-cols-2 {
+        columns: 1;
+      }
+
+      .comparison {
+        grid-template-columns: 1fr;
+      }
+
+      .diagram {
+        min-height: auto;
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-brand">Chalkboard</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="architecture.html">Architecture</a></li>
+    </ul>
+  </nav>
+
+  <div class="arch-container">
+    <div class="arch-content">
+      <div class="arch-header">
+        <h1>Chalkboard Architecture</h1>
+        <p>How the real app would be built and scaled</p>
+      </div>
+
+      <!-- 1. Stack and Why -->
+      <div class="section">
+        <div class="section-number">1. Stack & Why</div>
+        <h2>Recommended Cross-Platform Approach</h2>
+
+        <p><strong>Recommendation: Expo / React Native with React Native Web</strong></p>
+
+        <p>Use Expo for iOS and Android, with React Native Web for the web client. A single TypeScript codebase powers all three platforms. Expo's managed workflow eliminates the need to manage native builds initially, and Supabase's client libraries work seamlessly across all three targets.</p>
+
+        <div class="trade-off">
+          <strong>Why not native?</strong> Native (Swift, Kotlin) would be faster for certain gestures and the drawing canvas, but requires maintaining three codebases and tripled development time. Expo gets us to market 3–4× faster.
+        </div>
+
+        <div class="trade-off">
+          <strong>Why not Next.js only?</strong> Web-only won't reach students on phones during class (low friction to join is critical). Native apps see higher adoption and perform better for real-time drawing/captions.
+        </div>
+
+        <p><strong>Backend:</strong> Supabase (PostgreSQL + Auth + Realtime + Storage + Edge Functions). No separate API server initially; Supabase handles auth, database, file uploads, and broadcasts.</p>
+      </div>
+
+      <!-- 2. System Diagram -->
+      <div class="section">
+        <div class="section-number">2. System Diagram</div>
+        <h2>Architecture Overview</h2>
+
+        <div class="diagram">
+          <svg class="architecture-svg" viewBox="0 0 900 400" xmlns="http://www.w3.org/2000/svg">
+            <!-- Title -->
+            <text x="450" y="20" text-anchor="middle" font-size="18" font-weight="bold" fill="#333">Chalkboard System Architecture</text>
+
+            <!-- Clients -->
+            <g id="clients">
+              <rect x="50" y="60" width="120" height="60" fill="#e3f2fd" stroke="#2563eb" stroke-width="2" rx="5"/>
+              <text x="110" y="95" text-anchor="middle" font-size="13" font-weight="bold">iOS</text>
+              <text x="110" y="110" text-anchor="middle" font-size="11" fill="#666">(Expo)</text>
+
+              <rect x="200" y="60" width="120" height="60" fill="#e3f2fd" stroke="#2563eb" stroke-width="2" rx="5"/>
+              <text x="260" y="95" text-anchor="middle" font-size="13" font-weight="bold">Android</text>
+              <text x="260" y="110" text-anchor="middle" font-size="11" fill="#666">(Expo)</text>
+
+              <rect x="350" y="60" width="120" height="60" fill="#e3f2fd" stroke="#2563eb" stroke-width="2" rx="5"/>
+              <text x="410" y="95" text-anchor="middle" font-size="13" font-weight="bold">Web</text>
+              <text x="410" y="110" text-anchor="middle" font-size="11" fill="#666">(React Native Web)</text>
+            </g>
+
+            <!-- Supabase components -->
+            <g id="supabase">
+              <!-- Auth -->
+              <rect x="50" y="200" width="100" height="80" fill="#f0f9ff" stroke="#10b981" stroke-width="2" rx="5"/>
+              <text x="100" y="225" text-anchor="middle" font-size="12" font-weight="bold">Supabase Auth</text>
+              <text x="100" y="242" text-anchor="middle" font-size="10" fill="#666">Anonymous</text>
+              <text x="100" y="255" text-anchor="middle" font-size="10" fill="#666">Sign-in</text>
+
+              <!-- Postgres -->
+              <rect x="180" y="200" width="100" height="80" fill="#f0f9ff" stroke="#10b981" stroke-width="2" rx="5"/>
+              <text x="230" y="225" text-anchor="middle" font-size="12" font-weight="bold">PostgreSQL</text>
+              <text x="230" y="242" text-anchor="middle" font-size="10" fill="#666">Classes</text>
+              <text x="230" y="255" text-anchor="middle" font-size="10" fill="#666">Questions</text>
+
+              <!-- Realtime -->
+              <rect x="310" y="200" width="100" height="80" fill="#f0f9ff" stroke="#10b981" stroke-width="2" rx="5"/>
+              <text x="360" y="225" text-anchor="middle" font-size="12" font-weight="bold">Realtime</text>
+              <text x="360" y="242" text-anchor="middle" font-size="10" fill="#666">Broadcast</text>
+              <text x="360" y="255" text-anchor="middle" font-size="10" fill="#666">Presence</text>
+
+              <!-- Storage -->
+              <rect x="440" y="200" width="100" height="80" fill="#f0f9ff" stroke="#10b981" stroke-width="2" rx="5"/>
+              <text x="490" y="225" text-anchor="middle" font-size="12" font-weight="bold">Storage</text>
+              <text x="490" y="242" text-anchor="middle" font-size="10" fill="#666">Board</text>
+              <text x="490" y="255" text-anchor="middle" font-size="10" fill="#666">Images</text>
+            </g>
+
+            <!-- External services -->
+            <g id="external">
+              <rect x="570" y="200" width="110" height="80" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" rx="5"/>
+              <text x="625" y="225" text-anchor="middle" font-size="12" font-weight="bold">Speech-to-Text</text>
+              <text x="625" y="242" text-anchor="middle" font-size="10" fill="#666">Google Cloud</text>
+              <text x="625" y="255" text-anchor="middle" font-size="10" fill="#666">or Deepgram</text>
+
+              <rect x="710" y="200" width="110" height="80" fill="#fee2e2" stroke="#ef4444" stroke-width="2" rx="5"/>
+              <text x="765" y="225" text-anchor="middle" font-size="12" font-weight="bold">Hosting</text>
+              <text x="765" y="242" text-anchor="middle" font-size="10" fill="#666">Vercel / Netlify</text>
+              <text x="765" y="255" text-anchor="middle" font-size="10" fill="#666">+ CDN</text>
+            </g>
+
+            <!-- Connections -->
+            <line x1="110" y1="120" x2="100" y2="200" stroke="#999" stroke-width="2"/>
+            <line x1="260" y1="120" x2="230" y2="200" stroke="#999" stroke-width="2"/>
+            <line x1="410" y1="120" x2="360" y2="200" stroke="#999" stroke-width="2"/>
+
+            <!-- All clients to realtime -->
+            <line x1="110" y1="120" x2="360" y2="200" stroke="#999" stroke-width="1" stroke-dasharray="3,3"/>
+            <line x1="260" y1="120" x2="360" y2="200" stroke="#999" stroke-width="1" stroke-dasharray="3,3"/>
+            <line x1="410" y1="120" x2="360" y2="200" stroke="#999" stroke-width="1" stroke-dasharray="3,3"/>
+
+            <!-- Postgres to external services -->
+            <line x1="280" y1="240" x2="570" y2="240" stroke="#999" stroke-width="1" stroke-dasharray="3,3"/>
+
+            <!-- Legend -->
+            <text x="50" y="320" font-size="11" font-weight="bold" fill="#333">Solid lines: Direct connections | Dashed lines: Event-driven</text>
+          </svg>
+        </div>
+
+        <p><strong>Key components:</strong></p>
+        <ul>
+          <li><strong>Clients:</strong> iOS (Expo), Android (Expo), and Web (React Native Web) all share the same codebase.</li>
+          <li><strong>Supabase Auth:</strong> Anonymous sign-in for students, standard email/password for teachers.</li>
+          <li><strong>PostgreSQL:</strong> Stores classes, participants, questions, notes, and board state.</li>
+          <li><strong>Realtime over WebSockets:</strong> Broadcasts board drawing, teacher position, captions, and area visibility.</li>
+          <li><strong>Storage:</strong> Board snapshots and lesson materials (PDFs, images).</li>
+          <li><strong>Speech-to-Text:</strong> Realtime transcription of the teacher's voice (Google Cloud Speech-to-Text or Deepgram).</li>
+          <li><strong>Hosting:</strong> Web app on Vercel or Netlify; mobile apps on App Store and Play Store (via Expo Application Services for CI/CD).</li>
+        </ul>
+      </div>
+
+      <!-- 3. Realtime Design -->
+      <div class="section">
+        <div class="section-number">3. Realtime Design</div>
+        <h2>WebSocket Communication</h2>
+
+        <p><strong>Use one Supabase Realtime channel per class session.</strong> Channel name: <code>class:&lt;session_id&gt;</code>.</p>
+
+        <table>
+          <tr>
+            <th>Data</th>
+            <th>Transport</th>
+            <th>Rationale</th>
+          </tr>
+          <tr>
+            <td>Board drawing, teacher position, captions, area visibility</td>
+            <td>Broadcast (ephemeral)</td>
+            <td>High frequency, lossy OK, no need to persist</td>
+          </tr>
+          <tr>
+            <td>Who is online</td>
+            <td>Presence (built-in)</td>
+            <td>Automatic heartbeat, list of active participants</td>
+          </tr>
+          <tr>
+            <td>Questions, notes, board state, session state</td>
+            <td>Postgres Changes</td>
+            <td>Durable, auditable, late joiners fetch state</td>
+          </tr>
+        </table>
+
+        <p><strong>Example: Board drawing event</strong></p>
+        <div class="code-block json">
+{
+  "event": "board:draw",
+  "data": {
+    "session_id": "bio101-ph-2024-11-07",
+    "x": 240,
+    "y": 180,
+    "color": "#2d3436",
+    "width": 3,
+    "timestamp": 1730962800000
+  }
+}
+        </div>
+
+        <p><strong>Example: Caption event</strong></p>
+        <div class="code-block json">
+{
+  "event": "caption",
+  "data": {
+    "session_id": "bio101-ph-2024-11-07",
+    "text": "The light reactions occur in the thylakoid membranes",
+    "timestamp": 1730962805000
+  }
+}
+        </div>
+
+        <p><strong>Late joiner catch-up:</strong> When a student joins mid-class, fetch the current board state (raster image + object tree) from a <code>board_snapshots</code> table, and recent questions from the database. Then subscribe to Realtime to get live updates.</p>
+
+        <p><strong>Rate limiting & batching:</strong> Throttle drawing events to 30 Hz client-side (batch strokes within 33 ms windows) to avoid overwhelming the network. Captions and area changes send immediately.</p>
+      </div>
+
+      <!-- 4. Data Model -->
+      <div class="section">
+        <div class="section-number">4. Data Model</div>
+        <h2>Database Schema</h2>
+
+        <div class="code-block">
+-- Classes (recurring)
+CREATE TABLE classes (
+  id UUID PRIMARY KEY,
+  teacher_id UUID NOT NULL REFERENCES auth.users,
+  name TEXT NOT NULL,
+  description TEXT,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Sessions (one per class meeting)
+CREATE TABLE sessions (
+  id UUID PRIMARY KEY,
+  class_id UUID NOT NULL REFERENCES classes,
+  teacher_id UUID NOT NULL REFERENCES auth.users,
+  join_code TEXT UNIQUE NOT NULL,
+  started_at TIMESTAMP DEFAULT NOW(),
+  ended_at TIMESTAMP,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Participants
+CREATE TABLE participants (
+  id UUID PRIMARY KEY,
+  session_id UUID NOT NULL REFERENCES sessions,
+  user_id UUID REFERENCES auth.users,
+  display_name TEXT NOT NULL,
+  is_teacher BOOLEAN DEFAULT FALSE,
+  joined_at TIMESTAMP DEFAULT NOW(),
+  UNIQUE(session_id, user_id)
+);
+
+-- Questions
+CREATE TABLE questions (
+  id UUID PRIMARY KEY,
+  session_id UUID NOT NULL REFERENCES sessions,
+  student_id UUID NOT NULL REFERENCES participants,
+  text TEXT NOT NULL,
+  board_snapshot_url TEXT,
+  marked_area JSON,
+  answered BOOLEAN DEFAULT FALSE,
+  pinned BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Notes
+CREATE TABLE notes (
+  id UUID PRIMARY KEY,
+  session_id UUID NOT NULL REFERENCES sessions,
+  title TEXT NOT NULL,
+  content TEXT,
+  order_index INT,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Board state (persisted for late joiners)
+CREATE TABLE board_snapshots (
+  id UUID PRIMARY KEY,
+  session_id UUID NOT NULL REFERENCES sessions,
+  image_url TEXT NOT NULL,
+  objects JSONB,
+  area_layout TEXT,
+  visible_areas JSONB,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Transcripts (for captions & record)
+CREATE TABLE transcript_segments (
+  id UUID PRIMARY KEY,
+  session_id UUID NOT NULL REFERENCES sessions,
+  text TEXT NOT NULL,
+  timestamp_ms INT NOT NULL,
+  confidence FLOAT,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+        </div>
+
+        <p><strong>Row Level Security:</strong></p>
+        <ul>
+          <li>Students see only <strong>visible board areas</strong> (via <code>visible_areas</code> in session).</li>
+          <li>Only the <strong>teacher sees all questions</strong>; students see only their own questions and marked-answered ones.</li>
+          <li>Board snapshots accessible to all session participants.</li>
+          <li>Transcripts visible to all, archived after session ends.</li>
+        </ul>
+      </div>
+
+      <!-- 5. Joining -->
+      <div class="section">
+        <div class="section-number">5. Joining</div>
+        <h2>Frictionless Student Entry</h2>
+
+        <ul>
+          <li><strong>Join codes:</strong> 6-character alphanumeric (e.g., <code>BIO101-PH</code>). Student enters it or scan QR code.</li>
+          <li><strong>QR deep links:</strong> QR encodes a universal link: <code>chalkboard.app/join?code=BIO101-PH</code>. On iOS it opens the app; on Android it opens the app or web; on desktop it opens the browser.</li>
+          <li><strong>Anonymous sign-in:</strong> No account needed for students. System creates an anonymous Supabase user, then stores their display name in the <code>participants</code> table.</li>
+          <li><strong>Link expiry:</strong> Join codes expire 24 hours after class ends. Teachers can manually revoke.</li>
+        </ul>
+
+        <div class="code-block">
+// Joining flow (pseudocode)
+const joinClass = async (joinCode, displayName) => {
+  // Create anonymous user
+  const { data } = await supabase.auth.signInAnonymously();
+
+  // Find session by join code
+  const { data: session } = await supabase
+    .from('sessions')
+    .select('*')
+    .eq('join_code', joinCode)
+    .single();
+
+  // Add participant
+  await supabase.from('participants').insert({
+    session_id: session.id,
+    user_id: data.user.id,
+    display_name: displayName
+  });
+
+  // Subscribe to Realtime
+  subscribeToSession(session.id);
+};
+        </div>
+      </div>
+
+      <!-- 6. Live Transcription -->
+      <div class="section">
+        <div class="section-number">6. Live Transcription</div>
+        <h2>Microphone to Captions</h2>
+
+        <p><strong>Path:</strong> Teacher's microphone → streaming speech-to-text → captions broadcast → all clients display.</p>
+
+        <p><strong>Providers & trade-offs:</strong></p>
+
+        <div class="comparison">
+          <div class="comparison-item">
+            <strong>Google Cloud Speech-to-Text</strong><br>
+            ~$0.024 per 15 sec, 300 ms latency, very accurate. Need to manage audio streaming.
+          </div>
+          <div class="comparison-item">
+            <strong>Deepgram</strong><br>
+            $0.0043 per min, 400 ms latency, simple API, excellent accuracy. Recommended.
+          </div>
+        </div>
+
+        <p><strong>Implementation:</strong> Teacher's browser captures audio via WebRTC or native audio API, sends to Deepgram real-time API, receives text, broadcasts via Realtime Broadcast channel. Clients render captions in the Present mode overlay.</p>
+
+        <p><strong>Storage:</strong> Save transcript segments to <code>transcript_segments</code> table for post-class review and accessibility compliance (FERPA).</p>
+      </div>
+
+      <!-- 7. Hosting & Deployment -->
+      <div class="section">
+        <div class="section-number">7. Hosting & Deployment</div>
+        <h2>Getting to Production</h2>
+
+        <ul>
+          <li><strong>Web app:</strong> Deploy to Vercel or Netlify (automatic on every push to main). Use environment variables for Supabase URL and API keys.</li>
+          <li><strong>Supabase plan:</strong> Start with the Free plan (up to 50,000 monthly active users, 5 GB storage). Scale to Pro ($25/mo) or Custom when you hit limits or need higher rate limits on Realtime.</li>
+          <li><strong>Edge Functions:</strong> Use for QR code generation, email notifications, and moderation. Supabase Edge Functions (Deno) run for free within rate limits.</li>
+          <li><strong>Mobile CI/CD:</strong> Use Expo Application Services (EAS) for iOS and Android builds. Runs in the cloud, no local Xcode/Android Studio needed. ~$300/mo for 1,000+ builds.</li>
+          <li><strong>Environments:</strong> Staging (staging-db) and production (prod-db). Mobile apps can point to either via config.</li>
+        </ul>
+      </div>
+
+      <!-- 8. Scale & Cost -->
+      <div class="section">
+        <div class="section-number">8. Scale, Cost & Limits</div>
+        <h2>Numbers that Matter</h2>
+
+        <p><strong>One class of 30 students:</strong></p>
+        <ul>
+          <li>~300 board drawing events/sec (30 participants × 10 strokes/sec).</li>
+          <li>~1 KB per Realtime message → 300 KB/sec = ~1.08 GB/hour.</li>
+          <li>~30 Postgres writes/min (questions, notes).</li>
+          <li>~120 concurrent WebSocket connections.</li>
+          <li><strong>Cost:</strong> Negligible on Free plan (included in Supabase limits).</li>
+        </ul>
+
+        <p><strong>1,000 classes running at once (~30,000 students):</strong></p>
+        <ul>
+          <li>~30,000 concurrent WebSocket connections → Supabase Real time can handle this on Pro plan.</li>
+          <li>~9 million Realtime messages/hour → ~$0.50/hour at scale (Pro plan).</li>
+          <li>~50,000 Postgres writes/hour → Well within Pro limits (10,000 queries/sec).</li>
+          <li><strong>Cost:</strong> ~$25/mo (Supabase Pro) + $10/mo (Vercel) + $50/mo (transcription) = ~$85/mo base.</li>
+        </ul>
+
+        <p><strong>What breaks first:</strong> Realtime bandwidth (switch to a dedicated socket server if >100,000 concurrent). Then Postgres connections (add pgBouncer). Then storage (archive old board images to S3-compatible storage).</p>
+      </div>
+
+      <!-- 9. Security & Privacy -->
+      <div class="section">
+        <div class="section-number">9. Security & Privacy</div>
+        <h2>Protecting Students</h2>
+
+        <ul>
+          <li><strong>COPPA (Children's Online Privacy Protection Act):</strong> If any users are <13, require parental consent before collecting personal info. Disable analytics for minors; no ads or tracking.</li>
+          <li><strong>FERPA (Family Educational Rights and Privacy Act):</strong> Treat student questions and session data as "educational records." Encrypt at rest and in transit. Allow parents to request deletion of their child's data.</li>
+          <li><strong>Data retention:</strong> Delete session recordings 90 days after class ends, unless teacher opts to archive. Student questions deleted 1 year after session.</li>
+          <li><strong>Moderation:</strong> Flag questions with certain keywords (admin review). Teachers can delete inappropriate questions immediately.</li>
+          <li><strong>Auth:</strong> HTTPS only. Session tokens expire after 24 hours idle. Require teacher login (email + password or SSO via Google/Microsoft for school integrations).</li>
+        </ul>
+      </div>
+
+      <!-- 10. Build Plan -->
+      <div class="section">
+        <div class="section-number">10. Build Plan</div>
+        <h2>Phases: MVP → v1 → Scale</h2>
+
+        <div class="phase-card">
+          <div class="phase-title">Phase 1: MVP (8 weeks)</div>
+          <ul class="phase-list">
+            <li>Expo app + React web</li>
+            <li>Supabase Auth (anonymous students, email teachers)</li>
+            <li>Whiteboard (drawing only, no areas or hidden sections)</li>
+            <li>Questions inbox (text only, no snapshots)</li>
+            <li>No transcription or Present mode</li>
+            <li>Manual QR codes (static image)</li>
+            <li>Deploy to Vercel + TestFlight/internal testing</li>
+          </ul>
+        </div>
+
+        <div class="phase-card">
+          <div class="phase-title">Phase 2: v1.0 (10 weeks)</div>
+          <ul class="phase-list">
+            <li>Board areas (whole/halves/2×2 grid)</li>
+            <li>Question snapshots (screenshot of marked area)</li>
+            <li>Dynamic QR code generation</li>
+            <li>Basic transcription (Google Cloud Speech)</li>
+            <li>Present mode (slides + live captions)</li>
+            <li>Lesson notes (push to board)</li>
+            <li>Public beta (App Store + Play Store)</li>
+          </ul>
+        </div>
+
+        <div class="phase-card">
+          <div class="phase-title">Phase 3: v1.1 (6 weeks)</div>
+          <ul class="phase-list">
+            <li>Teacher authentication (Google/Microsoft SSO)</li>
+            <li>Class roster & attendance</li>
+            <li>Student profiles + avatars</li>
+            <li>Archive & replay (watch past class)</li>
+            <li>Analytics dashboard</li>
+          </ul>
+        </div>
+
+        <p><strong>Open decisions for the founder:</strong></p>
+
+        <table>
+          <tr>
+            <th>Decision</th>
+            <th>Option A</th>
+            <th>Option B</th>
+            <th>Recommendation</th>
+          </tr>
+          <tr>
+            <td>Transcription provider</td>
+            <td>Google Cloud ($0.024/15s)</td>
+            <td>Deepgram ($0.0043/min)</td>
+            <td>Deepgram (faster, cheaper)</td>
+          </tr>
+          <tr>
+            <td>Revenue model</td>
+            <td>Freemium (free for teachers)</td>
+            <td>B2B (charge schools)</td>
+            <td>Freemium initially (network effects > revenue)</td>
+          </tr>
+          <tr>
+            <td>Teacher sign-in</td>
+            <td>Email only</td>
+            <td>Google/Microsoft SSO</td>
+            <td>Both (SSO in v1.1)</td>
+          </tr>
+          <tr>
+            <td>Board drawing library</td>
+            <td>Canvas API (built-in)</td>
+            <td>Fabric.js or Konva</td>
+            <td>Canvas + custom (lighter, full control)</td>
+          </tr>
+        </table>
+      </div>
+
+      <div style="padding: var(--space-8); background-color: rgba(37, 99, 235, 0.05); border-radius: var(--radius-lg); margin-top: var(--space-8);">
+        <p style="margin: 0;"><strong>Questions or feedback?</strong> This prototype and architecture are simulated to show the product vision. The real build starts with user research and feedback from early teachers.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="badge">Prototype · simulated data</div>
+</body>
+</html>

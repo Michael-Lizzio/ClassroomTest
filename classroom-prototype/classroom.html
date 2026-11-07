@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Classroom - Chalkboard</title>
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/app.css">
+  <style>
+    .classroom-container {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .controls {
+      padding: var(--space-4) var(--space-6);
+      background-color: var(--bg-secondary);
+      border-bottom: 1px solid var(--color-neutral-200);
+      display: flex;
+      gap: var(--space-4);
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .classroom-content {
+      flex: 1;
+      display: flex;
+      background-color: #f5f3f0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .classroom-svg-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-8);
+    }
+
+    .classroom-svg {
+      width: 100%;
+      max-width: 1000px;
+      height: auto;
+    }
+
+    .board-text {
+      font-family: var(--font-board);
+      font-size: 32px;
+      fill: var(--color-board-chalk);
+      opacity: 0;
+    }
+
+    .text-appear {
+      animation: textAppear 0.6s ease-out forwards;
+    }
+
+    @keyframes textAppear {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .teacher-wave {
+      animation: waveArm 0.8s ease-in-out infinite;
+      transform-origin: 220px 220px;
+    }
+
+    @keyframes waveArm {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(-30deg); }
+    }
+
+    /* For small screens */
+    @media (max-width: 768px) {
+      .classroom-svg-container {
+        padding: var(--space-4);
+      }
+
+      .classroom-svg {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-brand">Chalkboard</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="architecture.html">Architecture</a></li>
+    </ul>
+  </nav>
+
+  <div class="classroom-container">
+    <div class="controls">
+      <button id="play-btn" class="button button-primary button-small">▶ Play</button>
+      <button id="pause-btn" class="button button-secondary button-small">⏸ Pause</button>
+      <button id="restart-btn" class="button button-secondary button-small">↻ Restart</button>
+      <div style="flex: 1;"></div>
+      <div class="timeline-bar" style="width: 200px;">
+        <div class="timeline-progress" id="progress-bar"></div>
+      </div>
+      <span id="time-display" style="font-size: var(--text-xs); color: var(--color-neutral-500); min-width: 50px;">0s / 20s</span>
+    </div>
+
+    <div class="classroom-content">
+      <div class="classroom-svg-container">
+        <svg class="classroom-svg" viewBox="0 0 1000 600" xmlns="http://www.w3.org/2000/svg">
+          <!-- Room background -->
+          <rect width="1000" height="600" fill="#f5f3f0"/>
+
+          <!-- Floor -->
+          <rect y="450" width="1000" height="150" fill="#e8dcc8"/>
+
+          <!-- Window with sunlight -->
+          <rect x="50" y="50" width="150" height="150" fill="#87ceeb" opacity="0.2"/>
+          <line x1="125" y1="50" x2="125" y2="200" stroke="#ddd" stroke-width="2"/>
+          <line x1="50" y1="125" x2="200" y2="125" stroke="#ddd" stroke-width="2"/>
+
+          <!-- Clock -->
+          <circle cx="900" cy="80" r="30" fill="white" stroke="#333" stroke-width="2"/>
+          <line x1="900" y1="80" x2="900" y2="60" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+          <line x1="900" y1="80" x2="915" y2="80" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+
+          <!-- Whiteboard -->
+          <g id="board-group">
+            <rect x="350" y="80" width="500" height="300" fill="#fffef0" stroke="#333" stroke-width="3" rx="8"/>
+
+            <!-- Board grid -->
+            <g stroke="#f0ede6" stroke-width="1" opacity="0.5">
+              <line x1="350" y1="150" x2="850" y2="150"/>
+              <line x1="350" y1="220" x2="850" y2="220"/>
+              <line x1="350" y1="290" x2="850" y2="290"/>
+              <line x1="500" y1="80" x2="500" y2="380"/>
+              <line x1="650" y1="80" x2="650" y2="380"/>
+            </g>
+
+            <!-- Board marker tray -->
+            <rect x="350" y="390" width="500" height="20" fill="#8b7355" rx="3"/>
+            <g opacity="0.4">
+              <circle cx="380" cy="400" r="4" fill="#e74c3c"/>
+              <circle cx="410" cy="400" r="4" fill="#3498db"/>
+              <circle cx="440" cy="400" r="4" fill="#2ecc71"/>
+              <circle cx="470" cy="400" r="4" fill="#f39c12"/>
+            </g>
+
+            <!-- Board text content -->
+            <text x="370" y="140" font-family="'Permanent Marker', cursive" font-size="36" fill="#2d3436" class="board-text" id="text-1">Biology 101</text>
+            <text x="370" y="200" font-family="'Permanent Marker', cursive" font-size="32" fill="#2d3436" class="board-text" id="text-2">Photosynthesis</text>
+            <text x="370" y="260" font-family="'Permanent Marker', cursive" font-size="28" fill="#2d3436" class="board-text" id="text-3">Energy from light</text>
+            <text x="370" y="320" font-family="'Permanent Marker', cursive" font-size="28" fill="#2d3436" class="board-text" id="text-4">→ ATP production</text>
+          </g>
+
+          <!-- Teacher character -->
+          <g id="teacher" transform="translate(200, 320)">
+            <!-- Body -->
+            <ellipse cx="0" cy="0" rx="30" ry="45" fill="#e8c57b"/>
+            <!-- Head -->
+            <circle cx="0" cy="-60" r="25" fill="#e8c57b"/>
+            <!-- Hair -->
+            <path d="M -20 -80 Q 0 -90 20 -80" fill="#8b6f47"/>
+            <!-- Eyes -->
+            <circle cx="-8" cy="-65" r="2.5" fill="#333"/>
+            <circle cx="8" cy="-65" r="2.5" fill="#333"/>
+            <!-- Smile -->
+            <path d="M -6 -50 Q 0 -45 6 -50" stroke="#333" stroke-width="2" fill="none"/>
+            <!-- Shirt -->
+            <rect x="-25" y="-5" width="50" height="40" fill="#4a90e2" rx="3"/>
+            <!-- Left arm -->
+            <g id="left-arm">
+              <line x1="-25" y1="5" x2="-70" y2="-30" stroke="#e8c57b" stroke-width="8" stroke-linecap="round"/>
+              <circle cx="-70" cy="-30" r="5" fill="#e8c57b"/>
+            </g>
+            <!-- Right arm (waving) -->
+            <g id="right-arm" class="teacher-wave">
+              <line x1="25" y1="5" x2="60" y2="-40" stroke="#e8c57b" stroke-width="8" stroke-linecap="round"/>
+              <circle cx="60" cy="-40" r="5" fill="#e8c57b"/>
+            </g>
+            <!-- Pants -->
+            <rect x="-15" y="35" width="30" height="40" fill="#333" rx="2"/>
+            <!-- Legs -->
+            <line x1="-8" y1="75" x2="-5" y2="110" stroke="#e8c57b" stroke-width="6" stroke-linecap="round"/>
+            <line x1="8" y1="75" x2="5" y2="110" stroke="#e8c57b" stroke-width="6" stroke-linecap="round"/>
+            <!-- Shoes -->
+            <ellipse cx="-5" cy="115" rx="7" ry="6" fill="#333"/>
+            <ellipse cx="5" cy="115" rx="7" ry="6" fill="#333"/>
+          </g>
+
+          <!-- Students -->
+          <g id="students">
+            <!-- Student 1 -->
+            <g class="student" transform="translate(100, 480)">
+              <circle cx="0" cy="0" r="18" fill="#fdc58c"/>
+              <ellipse cx="0" cy="30" rx="16" ry="25" fill="#4a90e2"/>
+              <circle cx="-6" cy="-2" r="2" fill="#333"/>
+              <circle cx="6" cy="-2" r="2" fill="#333"/>
+              <path d="M -3 4 Q 0 6 3 4" stroke="#333" stroke-width="1" fill="none"/>
+            </g>
+
+            <!-- Student 2 -->
+            <g class="student" transform="translate(750, 490)">
+              <circle cx="0" cy="0" r="18" fill="#b8a4d9"/>
+              <ellipse cx="0" cy="30" rx="16" ry="25" fill="#10b981"/>
+              <circle cx="-6" cy="-2" r="2" fill="#333"/>
+              <circle cx="6" cy="-2" r="2" fill="#333"/>
+              <path d="M -2 4 Q 0 5 2 4" stroke="#333" stroke-width="1" fill="none"/>
+            </g>
+
+            <!-- Student 3 -->
+            <g class="student" transform="translate(920, 500)">
+              <circle cx="0" cy="0" r="18" fill="#ffb5b5"/>
+              <ellipse cx="0" cy="30" rx="16" ry="25" fill="#f59e0b"/>
+              <circle cx="-6" cy="-2" r="2" fill="#333"/>
+              <circle cx="6" cy="-2" r="2" fill="#333"/>
+              <path d="M -4 4 Q 0 6 4 4" stroke="#333" stroke-width="1" fill="none"/>
+            </g>
+          </g>
+
+          <!-- Desks -->
+          <g opacity="0.3">
+            <rect x="70" y="510" width="60" height="35" fill="#8b7355" rx="2"/>
+            <rect x="50" y="545" width="80" height="10" fill="#8b7355"/>
+
+            <rect x="720" y="520" width="60" height="35" fill="#8b7355" rx="2"/>
+            <rect x="700" y="555" width="80" height="10" fill="#8b7355"/>
+
+            <rect x="890" y="530" width="60" height="35" fill="#8b7355" rx="2"/>
+            <rect x="870" y="565" width="80" height="10" fill="#8b7355"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="badge">Prototype · simulated data</div>
+
+  <script src="assets/js/demo-engine.js"></script>
+  <script src="assets/js/classroom.js"></script>
+</body>
+</html>

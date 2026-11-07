@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Present Mode - Chalkboard</title>
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/app.css">
+  <style>
+    .present-container {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .controls {
+      padding: var(--space-4) var(--space-6);
+      background-color: var(--bg-secondary);
+      border-bottom: 1px solid var(--color-neutral-200);
+      display: flex;
+      gap: var(--space-4);
+      align-items: center;
+    }
+
+    .present-area {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #1a1a1a;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .projector-screen {
+      width: 90%;
+      max-width: 1000px;
+      height: 90%;
+      max-height: 600px;
+      background-color: white;
+      border-radius: var(--radius-lg);
+      box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .slide-content {
+      flex: 1;
+      padding: var(--space-12);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      animation: slideIn 0.6s ease-out;
+      position: relative;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .slide-title {
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: var(--space-6);
+    }
+
+    .slide-content-text {
+      font-size: 1.5rem;
+      color: var(--color-neutral-700);
+      line-height: 1.6;
+      max-width: 800px;
+    }
+
+    .slide-controls {
+      display: flex;
+      gap: var(--space-4);
+      justify-content: center;
+      padding: var(--space-6);
+      background-color: var(--bg-tertiary);
+      border-top: 1px solid var(--color-neutral-200);
+    }
+
+    .slide-nav {
+      padding: var(--space-2) var(--space-4);
+      border: 1px solid var(--color-neutral-300);
+      background-color: white;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      font-weight: 600;
+      transition: all var(--transition-fast) var(--transition-timing);
+      min-width: 100px;
+    }
+
+    .slide-nav:hover {
+      background-color: var(--color-neutral-100);
+    }
+
+    .slide-nav:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .captions-area {
+      padding: var(--space-4);
+      background-color: rgba(0, 0, 0, 0.7);
+      color: white;
+      font-size: 1.1rem;
+      min-height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+    }
+
+    .caption-text {
+      animation: fadeIn 0.3s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .slide-indicator {
+      position: absolute;
+      top: var(--space-4);
+      right: var(--space-4);
+      font-size: var(--text-sm);
+      color: var(--color-neutral-500);
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: var(--space-2) var(--space-4);
+      border-radius: var(--radius-full);
+    }
+
+    .slide {
+      display: none;
+    }
+
+    .slide.active {
+      display: block;
+    }
+
+    .pull-down-indicator {
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 8px;
+      background-color: var(--color-neutral-300);
+      border-radius: 4px;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-brand">Chalkboard</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="architecture.html">Architecture</a></li>
+    </ul>
+  </nav>
+
+  <div class="present-container">
+    <div class="controls">
+      <button id="play-btn" class="button button-primary button-small">▶ Play</button>
+      <button id="pause-btn" class="button button-secondary button-small">⏸ Pause</button>
+      <button id="restart-btn" class="button button-secondary button-small">↻ Restart</button>
+      <div style="flex: 1;"></div>
+      <div class="timeline-bar" style="width: 200px;">
+        <div class="timeline-progress" id="progress-bar"></div>
+      </div>
+      <span id="time-display" style="font-size: var(--text-xs); color: var(--color-neutral-500); min-width: 50px;">0s / 22s</span>
+    </div>
+
+    <div class="present-area">
+      <div class="projector-screen">
+        <div class="slide-indicator" id="slide-number">Slide 1 of 4</div>
+
+        <div class="slide-content" id="slide-content">
+          <!-- Slide 1 -->
+          <div class="slide active" data-slide="1">
+            <div class="slide-title">Photosynthesis</div>
+            <div class="slide-content-text">The process by which plants convert light energy into chemical energy</div>
+          </div>
+
+          <!-- Slide 2 -->
+          <div class="slide" data-slide="2">
+            <div class="slide-title">Light Reactions</div>
+            <div class="slide-content-text">Occur in thylakoid membranes<br>Convert light energy to ATP and NADPH<br>Release oxygen as byproduct</div>
+          </div>
+
+          <!-- Slide 3 -->
+          <div class="slide" data-slide="3">
+            <div class="slide-title">Calvin Cycle</div>
+            <div class="slide-content-text">Dark reactions occur in stroma<br>Uses ATP and NADPH to fix CO₂<br>Produces glucose</div>
+          </div>
+
+          <!-- Slide 4 -->
+          <div class="slide" data-slide="4">
+            <div class="slide-title">Key Takeaway</div>
+            <div class="slide-content-text">Photosynthesis converts light energy into chemical energy that powers most life on Earth</div>
+          </div>
+        </div>
+
+        <div class="captions-area">
+          <div class="caption-text" id="caption-text">Live captions appear here...</div>
+        </div>
+
+        <div class="slide-controls">
+          <button class="slide-nav" id="prev-slide">← Previous</button>
+          <span id="slide-counter" style="padding: 0 var(--space-4); display: flex; align-items: center;">Slide 1 / 4</span>
+          <button class="slide-nav" id="next-slide">Next →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="badge">Prototype · simulated data</div>
+
+  <script src="assets/js/demo-engine.js"></script>
+  <script src="assets/js/present.js"></script>
+</body>
+</html>

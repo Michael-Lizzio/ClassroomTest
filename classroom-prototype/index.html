@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chalkboard - Collaborative Virtual Classroom</title>
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/app.css">
+  <style>
+    .hero {
+      padding: var(--space-20) var(--space-4);
+      text-align: center;
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(16, 185, 129, 0.05) 100%);
+    }
+
+    .hero h1 {
+      margin-bottom: var(--space-4);
+      color: var(--color-primary);
+    }
+
+    .hero-subtitle {
+      font-size: var(--text-xl);
+      color: var(--color-neutral-600);
+      margin-bottom: var(--space-12);
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-animation {
+      max-width: 800px;
+      height: 400px;
+      margin: 0 auto var(--space-20);
+      background-color: white;
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-xl);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .classroom-svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .demos {
+      padding: var(--space-20) var(--space-4);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .demos h2 {
+      text-align: center;
+      margin-bottom: var(--space-12);
+    }
+
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: var(--space-8);
+    }
+
+    .demo-card {
+      background: white;
+      border: 1px solid var(--color-neutral-200);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition-base) var(--transition-timing);
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .demo-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-4px);
+    }
+
+    .demo-card-preview {
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: var(--text-sm);
+      font-weight: 600;
+      text-align: center;
+      padding: var(--space-4);
+    }
+
+    .demo-card-content {
+      padding: var(--space-6);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .demo-card-title {
+      font-size: var(--text-lg);
+      font-weight: 700;
+      margin-bottom: var(--space-2);
+      color: var(--color-neutral-900);
+    }
+
+    .demo-card-desc {
+      font-size: var(--text-sm);
+      color: var(--color-neutral-600);
+      margin-bottom: var(--space-4);
+      flex: 1;
+    }
+
+    .demo-card-link {
+      display: inline-flex;
+      align-items: center;
+      color: var(--color-primary);
+      font-weight: 600;
+      font-size: var(--text-sm);
+      gap: var(--space-2);
+      margin-top: auto;
+    }
+
+    .demo-card-link::after {
+      content: '→';
+    }
+
+    .footer {
+      padding: var(--space-12) var(--space-4);
+      text-align: center;
+      color: var(--color-neutral-600);
+      font-size: var(--text-sm);
+      border-top: 1px solid var(--color-neutral-200);
+    }
+
+    /* Hero animation */
+    @keyframes teacherWalk {
+      0% { transform: translateX(-100px); }
+      50% { transform: translateX(100px); }
+      100% { transform: translateX(-100px); }
+    }
+
+    @keyframes boardWrite {
+      0% { stroke-dasharray: 0 100; }
+      100% { stroke-dasharray: 100 0; }
+    }
+
+    .teacher-group {
+      animation: teacherWalk 4s ease-in-out infinite;
+    }
+
+    .board-text {
+      font-family: var(--font-board);
+      font-size: 24px;
+      fill: var(--color-board-chalk);
+      opacity: 0;
+      animation: fadeInText 1s ease-in-out 2s forwards;
+    }
+
+    @keyframes fadeInText {
+      to { opacity: 1; }
+    }
+
+    .student {
+      animation: studentNod 2s ease-in-out infinite;
+    }
+
+    @keyframes studentNod {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-brand">Chalkboard</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="architecture.html">Architecture</a></li>
+    </ul>
+  </nav>
+
+  <div class="hero">
+    <h1>Chalkboard</h1>
+    <p class="hero-subtitle">Live collaborative virtual classroom where teachers teach and students learn in real time</p>
+
+    <div class="hero-animation">
+      <svg class="classroom-svg" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+        <!-- Room background -->
+        <rect width="800" height="400" fill="#f5f3f0"/>
+
+        <!-- Floor -->
+        <rect y="300" width="800" height="100" fill="#e8dcc8"/>
+
+        <!-- Window -->
+        <rect x="50" y="40" width="120" height="100" fill="#87ceeb" opacity="0.3"/>
+        <line x1="110" y1="40" x2="110" y2="140" stroke="#ddd" stroke-width="2"/>
+        <line x1="50" y1="90" x2="170" y2="90" stroke="#ddd" stroke-width="2"/>
+
+        <!-- Whiteboard -->
+        <rect x="350" y="60" width="380" height="200" fill="#fffef0" stroke="#333" stroke-width="3" rx="5"/>
+        <!-- Whiteboard grid -->
+        <g stroke="#f0ede6" stroke-width="1" opacity="0.5">
+          <line x1="350" y1="100" x2="730" y2="100"/>
+          <line x1="350" y1="140" x2="730" y2="140"/>
+          <line x1="350" y1="180" x2="730" y2="180"/>
+          <line x1="350" y1="220" x2="730" y2="220"/>
+          <line x1="440" y1="60" x2="440" y2="260"/>
+          <line x1="530" y1="60" x2="530" y2="260"/>
+          <line x1="620" y1="60" x2="620" y2="260"/>
+        </g>
+        <!-- Board text -->
+        <text x="375" y="140" font-family="'Permanent Marker', cursive" font-size="28" fill="#2d3436" class="board-text">Live Classroom</text>
+        <text x="375" y="180" font-family="'Permanent Marker', cursive" font-size="24" fill="#2d3436" class="board-text" style="animation-delay: 2.3s">All Online</text>
+
+        <!-- Teacher character -->
+        <g class="teacher-group">
+          <!-- Body -->
+          <ellipse cx="200" cy="240" rx="25" ry="35" fill="#e8c57b"/>
+          <!-- Head -->
+          <circle cx="200" cy="195" r="20" fill="#e8c57b"/>
+          <!-- Eyes -->
+          <circle cx="193" cy="192" r="2" fill="#333"/>
+          <circle cx="207" cy="192" r="2" fill="#333"/>
+          <!-- Smile -->
+          <path d="M 195 197 Q 200 199 205 197" stroke="#333" stroke-width="1.5" fill="none"/>
+          <!-- Shirt -->
+          <rect x="180" y="230" width="40" height="25" fill="#4a90e2" rx="3"/>
+          <!-- Arms -->
+          <g id="left-arm">
+            <line x1="180" y1="235" x2="160" y2="220" stroke="#e8c57b" stroke-width="6" stroke-linecap="round"/>
+            <circle cx="160" cy="220" r="4" fill="#e8c57b"/>
+          </g>
+          <g id="right-arm">
+            <line x1="220" y1="235" x2="240" y2="220" stroke="#e8c57b" stroke-width="6" stroke-linecap="round"/>
+            <circle cx="240" cy="220" r="4" fill="#e8c57b"/>
+          </g>
+          <!-- Legs -->
+          <line x1="190" y1="265" x2="185" y2="295" stroke="#333" stroke-width="5" stroke-linecap="round"/>
+          <line x1="210" y1="265" x2="215" y2="295" stroke="#333" stroke-width="5" stroke-linecap="round"/>
+          <!-- Shoes -->
+          <ellipse cx="185" cy="298" rx="6" ry="5" fill="#333"/>
+          <ellipse cx="215" cy="298" rx="6" ry="5" fill="#333"/>
+        </g>
+
+        <!-- Student 1 -->
+        <g class="student" style="animation-delay: 0s">
+          <circle cx="100" cy="260" r="16" fill="#fdc58c"/>
+          <ellipse cx="100" cy="290" rx="14" ry="20" fill="#4a90e2"/>
+          <circle cx="90" cy="258" r="2" fill="#333"/>
+          <circle cx="110" cy="258" r="2" fill="#333"/>
+        </g>
+
+        <!-- Student 2 -->
+        <g class="student" style="animation-delay: 0.5s">
+          <circle cx="80" cy="310" r="16" fill="#b8a4d9"/>
+          <ellipse cx="80" cy="340" rx="14" ry="20" fill="#10b981"/>
+          <circle cx="70" cy="308" r="2" fill="#333"/>
+          <circle cx="90" cy="308" r="2" fill="#333"/>
+        </g>
+
+        <!-- Student 3 -->
+        <g class="student" style="animation-delay: 1s">
+          <circle cx="130" cy="290" r="16" fill="#ffb5b5"/>
+          <ellipse cx="130" cy="320" rx="14" ry="20" fill="#f59e0b"/>
+          <circle cx="120" cy="288" r="2" fill="#333"/>
+          <circle cx="140" cy="288" r="2" fill="#333"/>
+        </g>
+
+        <!-- Desks -->
+        <g opacity="0.3">
+          <rect x="70" y="310" width="50" height="30" fill="#8b7355" rx="2"/>
+          <rect x="50" y="340" width="60" height="8" fill="#8b7355"/>
+          <rect x="120" y="320" width="50" height="30" fill="#8b7355" rx="2"/>
+          <rect x="100" y="350" width="60" height="8" fill="#8b7355"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <div class="demos">
+    <h2>Demo Pages</h2>
+    <div class="demo-grid">
+      <a href="join.html" class="demo-card">
+        <div class="demo-card-preview">📱 Student Join Flow</div>
+        <div class="demo-card-content">
+          <div class="demo-card-title">Join</div>
+          <p class="demo-card-desc">Scan QR code, enter name, and join the classroom</p>
+          <span class="demo-card-link">Open Demo</span>
+        </div>
+      </a>
+
+      <a href="classroom.html" class="demo-card">
+        <div class="demo-card-preview">👥 Student View</div>
+        <div class="demo-card-content">
+          <div class="demo-card-title">Classroom</div>
+          <p class="demo-card-desc">Watch the teacher write on the board in real time</p>
+          <span class="demo-card-link">Open Demo</span>
+        </div>
+      </a>
+
+      <a href="ask.html" class="demo-card">
+        <div class="demo-card-preview">❓ Ask Question</div>
+        <div class="demo-card-content">
+          <div class="demo-card-title">Questions</div>
+          <p class="demo-card-desc">Student circles something and sends a question</p>
+          <span class="demo-card-link">Open Demo</span>
+        </div>
+      </a>
+
+      <a href="teacher.html" class="demo-card">
+        <div class="demo-card-preview">🎓 Teacher Console</div>
+        <div class="demo-card-content">
+          <div class="demo-card-title">Teacher View</div>
+          <p class="demo-card-desc">Manage the classroom, questions, and student roster</p>
+          <span class="demo-card-link">Open Demo</span>
+        </div>
+      </a>
+
+      <a href="present.html" class="demo-card">
+        <div class="demo-card-preview">🎬 Present Mode</div>
+        <div class="demo-card-content">
+          <div class="demo-card-title">Presentation</div>
+          <p class="demo-card-desc">Project slides with live captions of what you're saying</p>
+          <span class="demo-card-link">Open Demo</span>
+        </div>
+      </a>
+
+      <a href="devices.html" class="demo-card">
+        <div class="demo-card-preview">📺 Multi-Device</div>
+        <div class="demo-card-content">
+          <div class="demo-card-title">Responsive</div>
+          <p class="demo-card-desc">See the classroom on iPhone, Android, and desktop</p>
+          <span class="demo-card-link">Open Demo</span>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>Built as a clickable prototype with simulated behavior. No backend, no build step.</p>
+  </div>
+
+  <div class="badge">Prototype · simulated data</div>
+</body>
+</html>

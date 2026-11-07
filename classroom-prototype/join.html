@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Join - Chalkboard</title>
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/app.css">
+  <style>
+    .join-container {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .controls {
+      padding: var(--space-4) var(--space-6);
+      background-color: var(--bg-secondary);
+      border-bottom: 1px solid var(--color-neutral-200);
+      display: flex;
+      gap: var(--space-4);
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .demo-area {
+      flex: 1;
+      display: flex;
+      gap: var(--space-8);
+      padding: var(--space-8);
+      background-color: var(--bg-tertiary);
+      overflow: auto;
+      align-items: flex-start;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .phone-container {
+      flex-shrink: 0;
+    }
+
+    .desktop-container {
+      flex: 1;
+      min-width: 400px;
+      max-width: 800px;
+      display: flex;
+      flex-direction: column;
+      background: white;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+    }
+
+    .desktop-header {
+      padding: var(--space-6);
+      border-bottom: 1px solid var(--color-neutral-200);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .desktop-content {
+      padding: var(--space-8);
+      text-align: center;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Phone content */
+    .phone-screen {
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+    }
+
+    .phone-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: var(--space-6);
+      overflow-y: auto;
+    }
+
+    .join-step {
+      display: none;
+    }
+
+    .join-step.active {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-6);
+    }
+
+    .qr-code {
+      width: 200px;
+      height: 200px;
+      margin: 0 auto;
+      background: white;
+      border: 2px solid var(--color-neutral-300);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--text-xs);
+      color: var(--color-neutral-500);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .qr-content {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .qr-pattern {
+      width: 100%;
+      height: 100%;
+      background-image:
+        linear-gradient(45deg, #000 25%, transparent 25%),
+        linear-gradient(-45deg, #000 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #000 75%),
+        linear-gradient(-45deg, transparent 75%, #000 75%);
+      background-size: 20px 20px;
+      background-position: 0 0, 0 10px, 10px -10px, -10px 0;
+      opacity: 0;
+      animation: qrScan 2s ease-in-out infinite;
+    }
+
+    @keyframes qrScan {
+      0%, 100% { opacity: 0; }
+      50% { opacity: 0.3; }
+    }
+
+    .step-title {
+      font-size: var(--text-lg);
+      font-weight: 700;
+      color: var(--color-neutral-900);
+      text-align: center;
+    }
+
+    .step-desc {
+      font-size: var(--text-sm);
+      color: var(--color-neutral-600);
+      text-align: center;
+    }
+
+    .name-input-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .name-input {
+      width: 100%;
+      padding: var(--space-3) var(--space-4);
+      border: 1px solid var(--color-neutral-300);
+      border-radius: var(--radius-md);
+      font-size: var(--text-base);
+      text-align: center;
+    }
+
+    .join-button {
+      width: 100%;
+      padding: var(--space-3);
+      background-color: var(--color-primary);
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color var(--transition-fast) var(--transition-timing);
+    }
+
+    .join-button:hover {
+      background-color: var(--color-primary-dark);
+    }
+
+    .classroom-viewport {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #f5f3f0 0%, #e8dcc8 100%);
+      position: relative;
+      border-top: 1px solid var(--color-neutral-200);
+    }
+
+    .success-message {
+      display: none;
+      text-align: center;
+      padding: var(--space-6);
+      background-color: rgba(16, 185, 129, 0.1);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-success);
+      color: var(--color-success);
+      font-weight: 600;
+    }
+
+    .success-message.show {
+      display: block;
+      animation: slideUp var(--transition-base) var(--transition-ease-out);
+    }
+
+    .desktop-link {
+      display: inline-block;
+      padding: var(--space-3) var(--space-6);
+      background-color: var(--color-primary);
+      color: white;
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      margin-top: var(--space-4);
+      transition: background-color var(--transition-fast) var(--transition-timing);
+    }
+
+    .desktop-link:hover {
+      background-color: var(--color-primary-dark);
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+
+    .modal-backdrop.show {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      padding: var(--space-8);
+      border-radius: var(--radius-xl);
+      text-align: center;
+      max-width: 400px;
+      animation: slideUp var(--transition-base) var(--transition-ease-out);
+    }
+
+    .modal-title {
+      font-size: var(--text-xl);
+      font-weight: 700;
+      margin-bottom: var(--space-4);
+    }
+
+    .modal-input {
+      width: 100%;
+      padding: var(--space-3);
+      border: 1px solid var(--color-neutral-300);
+      border-radius: var(--radius-md);
+      font-size: var(--text-base);
+      margin-bottom: var(--space-4);
+    }
+
+    .modal-buttons {
+      display: flex;
+      gap: var(--space-4);
+    }
+
+    .modal-buttons button {
+      flex: 1;
+      padding: var(--space-3);
+      border: none;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color var(--transition-fast) var(--transition-timing);
+    }
+
+    .modal-cancel {
+      background-color: var(--bg-tertiary);
+      color: var(--color-neutral-900);
+    }
+
+    .modal-cancel:hover {
+      background-color: var(--color-neutral-200);
+    }
+
+    .modal-confirm {
+      background-color: var(--color-primary);
+      color: white;
+    }
+
+    .modal-confirm:hover {
+      background-color: var(--color-primary-dark);
+    }
+
+    .student-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: var(--text-lg);
+      margin-bottom: var(--space-4);
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-brand">Chalkboard</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="architecture.html">Architecture</a></li>
+    </ul>
+  </nav>
+
+  <div class="join-container">
+    <div class="controls">
+      <button id="play-btn" class="button button-primary button-small">▶ Play</button>
+      <button id="pause-btn" class="button button-secondary button-small">⏸ Pause</button>
+      <button id="restart-btn" class="button button-secondary button-small">↻ Restart</button>
+      <div style="flex: 1;"></div>
+      <div class="timeline-bar" style="width: 200px;">
+        <div class="timeline-progress" id="progress-bar"></div>
+      </div>
+      <span id="time-display" style="font-size: var(--text-xs); color: var(--color-neutral-500); min-width: 50px;">0s / 18s</span>
+    </div>
+
+    <div class="demo-area">
+      <div class="phone-container">
+        <div class="phone-frame">
+          <div class="phone-screen">
+            <div class="phone-content">
+              <!-- Step 1: QR Code Scan -->
+              <div class="join-step active" id="step-qr">
+                <div class="step-title">Scan QR Code</div>
+                <div class="step-desc">Scan the QR code from your teacher's screen</div>
+                <div class="qr-code">
+                  <div class="qr-content">
+                    <div class="qr-pattern"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Step 2: Name Entry -->
+              <div class="join-step" id="step-name">
+                <div class="step-title">Enter Your Name</div>
+                <div class="step-desc">What should we call you?</div>
+                <div class="name-input-group">
+                  <input type="text" class="name-input" id="student-name" placeholder="Your name" value="Alex">
+                  <button class="join-button" id="join-btn-phone">Join Class</button>
+                </div>
+              </div>
+
+              <!-- Step 3: Joining -->
+              <div class="join-step" id="step-joining">
+                <div class="step-title">Joining...</div>
+                <div class="step-desc">Connecting to Biology 101</div>
+                <div style="text-align: center; padding: var(--space-8) 0;">
+                  <div class="spinner"></div>
+                </div>
+              </div>
+
+              <!-- Step 4: In Class -->
+              <div class="join-step" id="step-in-class">
+                <div class="student-avatar">A</div>
+                <div class="step-title">Welcome to Class!</div>
+                <div class="step-desc">Biology 101: Photosynthesis</div>
+                <div class="success-message show">You're now in the classroom</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="desktop-container">
+        <div class="desktop-header">
+          <h3 style="margin: 0;">Join via Link</h3>
+          <div class="student-avatar" style="width: 40px; height: 40px; font-size: var(--text-sm); margin: 0;">A</div>
+        </div>
+        <div class="desktop-content">
+          <div>
+            <h3>Open this link to join the class</h3>
+            <p style="color: var(--color-neutral-600); margin-bottom: var(--space-6);">Share link with students</p>
+            <div style="background-color: var(--bg-tertiary); padding: var(--space-4); border-radius: var(--radius-md); margin-bottom: var(--space-6); word-break: break-all;">
+              <code style="font-size: var(--text-sm);">chalkboard.app/join/bio101-ph</code>
+            </div>
+            <button class="desktop-link" id="join-link-btn">Enter Name & Join</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modal">
+    <div class="modal-content">
+      <div class="modal-title">What's your name?</div>
+      <input type="text" class="modal-input" id="desktop-name" placeholder="Your name" value="Alex">
+      <div class="modal-buttons">
+        <button class="modal-cancel" id="modal-cancel">Cancel</button>
+        <button class="modal-confirm" id="modal-join">Join Class</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="badge">Prototype · simulated data</div>
+
+  <script src="assets/js/demo-engine.js"></script>
+  <script src="assets/js/join.js"></script>
+</body>
+</html>

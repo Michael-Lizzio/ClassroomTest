@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multi-Device - Chalkboard</title>
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/app.css">
+  <style>
+    .devices-container {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .controls {
+      padding: var(--space-4) var(--space-6);
+      background-color: var(--bg-secondary);
+      border-bottom: 1px solid var(--color-neutral-200);
+    }
+
+    .devices-area {
+      flex: 1;
+      display: flex;
+      gap: var(--space-8);
+      padding: var(--space-8);
+      background-color: var(--bg-tertiary);
+      justify-content: center;
+      align-items: center;
+      overflow: auto;
+      flex-wrap: wrap;
+    }
+
+    .device-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-4);
+    }
+
+    .device-label {
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: var(--color-neutral-600);
+      text-align: center;
+    }
+
+    /* iPhone Frame */
+    .iphone-frame {
+      position: relative;
+      width: 350px;
+      height: 730px;
+      background-color: #000;
+      border-radius: 40px;
+      padding: 12px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .iphone-frame::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 150px;
+      height: 25px;
+      background-color: #000;
+      border-radius: 0 0 20px 20px;
+      z-index: 10;
+    }
+
+    .iphone-screen {
+      width: 100%;
+      height: 100%;
+      background-color: #f5f3f0;
+      border-radius: 35px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Android Frame */
+    .android-frame {
+      position: relative;
+      width: 360px;
+      height: 720px;
+      background-color: #222;
+      border-radius: 20px;
+      padding: 8px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .android-frame::before {
+      content: '';
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 20px;
+      background-color: #000;
+      border-radius: 0 0 15px 15px;
+      z-index: 10;
+    }
+
+    .android-screen {
+      width: 100%;
+      height: 100%;
+      background-color: #f5f3f0;
+      border-radius: 15px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Desktop Frame */
+    .desktop-frame {
+      position: relative;
+      width: 800px;
+      height: 600px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--color-neutral-200);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .desktop-header {
+      height: 50px;
+      background-color: var(--bg-secondary);
+      border-bottom: 1px solid var(--color-neutral-200);
+      display: flex;
+      align-items: center;
+      padding: 0 var(--space-4);
+      gap: var(--space-2);
+    }
+
+    .traffic-light {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .traffic-light.red { background-color: #ff5f56; }
+    .traffic-light.yellow { background-color: #ffbd2e; }
+    .traffic-light.green { background-color: #27c93f; }
+
+    .browser-url {
+      flex: 1;
+      margin-left: var(--space-4);
+      padding: 0 var(--space-3);
+      height: 30px;
+      background-color: #f0f0f0;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      font-size: var(--text-xs);
+      color: var(--color-neutral-600);
+    }
+
+    .desktop-content {
+      flex: 1;
+      background-color: white;
+      overflow: hidden;
+    }
+
+    /* Responsive phone layouts */
+    .phone-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      padding: var(--space-4);
+    }
+
+    .phone-board {
+      width: 100%;
+      aspect-ratio: 1;
+      background-color: #fffef0;
+      border: 1px solid var(--color-neutral-300);
+      border-radius: var(--radius-md);
+      margin-bottom: var(--space-4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--text-xs);
+      color: var(--color-neutral-500);
+      position: relative;
+    }
+
+    .board-mini {
+      width: 80%;
+      height: 80%;
+      background-color: #fdfbf7;
+      border: 1px solid #e8e6d3;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Permanent Marker', cursive;
+      font-size: 14px;
+      color: #2d3436;
+    }
+
+    .phone-controls {
+      display: flex;
+      gap: var(--space-2);
+    }
+
+    .control-btn {
+      flex: 1;
+      padding: var(--space-3);
+      background-color: var(--color-primary);
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: var(--text-xs);
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* Desktop layout */
+    .desktop-layout {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-4);
+      padding: var(--space-6);
+      background-color: #f9f9f9;
+    }
+
+    .desktop-panel {
+      background-color: white;
+      border: 1px solid var(--color-neutral-200);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4);
+      overflow: hidden;
+    }
+
+    .desktop-board-area {
+      width: 100%;
+      height: 300px;
+      background-color: #fffef0;
+      border: 1px solid #e8e6d3;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Permanent Marker', cursive;
+      color: #2d3436;
+      font-size: 28px;
+      margin-bottom: var(--space-6);
+    }
+
+    .desktop-right {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+
+    .desktop-section {
+      background-color: var(--bg-secondary);
+      padding: var(--space-4);
+      border-radius: var(--radius-md);
+      font-size: var(--text-sm);
+    }
+
+    .desktop-section h4 {
+      margin: 0 0 var(--space-3) 0;
+      font-size: var(--text-sm);
+      font-weight: 600;
+    }
+
+    @media (max-width: 1400px) {
+      .devices-area {
+        flex-direction: column;
+        gap: var(--space-4);
+      }
+
+      .device-container {
+        flex-direction: row;
+        align-items: center;
+      }
+
+      .device-label {
+        writing-mode: vertical-rl;
+        transform: rotate(180deg);
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-brand">Chalkboard</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="architecture.html">Architecture</a></li>
+    </ul>
+  </nav>
+
+  <div class="devices-container">
+    <div class="controls">
+      <span style="font-weight: 600; color: var(--color-neutral-700);">Same classroom, different device layouts</span>
+    </div>
+
+    <div class="devices-area">
+      <!-- iPhone -->
+      <div class="device-container">
+        <div class="device-label">iPhone</div>
+        <div class="iphone-frame">
+          <div class="iphone-screen">
+            <div class="phone-content">
+              <div class="phone-board">
+                <div class="board-mini">Biology 101</div>
+              </div>
+              <div class="phone-controls">
+                <button class="control-btn">Ask</button>
+                <button class="control-btn">Menu</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Android -->
+      <div class="device-container">
+        <div class="device-label">Android</div>
+        <div class="android-frame">
+          <div class="android-screen">
+            <div class="phone-content">
+              <div class="phone-board">
+                <div class="board-mini">Biology 101</div>
+              </div>
+              <div class="phone-controls">
+                <button class="control-btn">Ask</button>
+                <button class="control-btn">Menu</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Desktop -->
+      <div class="device-container" style="align-items: stretch;">
+        <div class="device-label">Desktop</div>
+        <div class="desktop-frame">
+          <div class="desktop-header">
+            <div class="traffic-light red"></div>
+            <div class="traffic-light yellow"></div>
+            <div class="traffic-light green"></div>
+            <div class="browser-url">chalkboard.app/class/bio101-ph</div>
+          </div>
+          <div class="desktop-content">
+            <div class="desktop-layout">
+              <div class="desktop-panel">
+                <div class="desktop-board-area">Biology 101</div>
+                <div style="font-size: var(--text-xs); color: var(--color-neutral-600);">
+                  <strong>8 students in class</strong><br>
+                  Code: BIO101-PH
+                </div>
+              </div>
+              <div class="desktop-panel">
+                <div class="desktop-right">
+                  <div class="desktop-section">
+                    <h4>Questions (2)</h4>
+                    <div style="color: var(--color-neutral-600);">New questions from students</div>
+                  </div>
+                  <div class="desktop-section">
+                    <h4>Notes</h4>
+                    <div style="color: var(--color-neutral-600);">Lesson content</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="badge">Prototype · simulated data</div>
+</body>
+</html>
