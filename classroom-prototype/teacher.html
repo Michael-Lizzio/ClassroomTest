@@ -26,6 +26,7 @@
         <li><a href="ask.html">Ask</a></li>
         <li><a href="present.html">Present</a></li>
         <li><a href="devices.html">Devices</a></li>
+        <li><a href="principal.html">Principal</a></li>
         <li><a href="architecture.html">Architecture</a></li>
       </ul>
     </nav>
@@ -127,6 +128,36 @@
           </div>
           <h3 style="margin:16px 0 8px">Roster</h3>
           <ul class="roster" id="roster"></ul>
+        </section>
+        <section class="panel" aria-labelledby="help-title" id="help-panel">
+          <div class="panel-head"><h2 id="help-title">Ask the principal for help</h2></div>
+          <p class="muted" style="font-size:var(--fs-sm);margin-bottom:12px">Available any time during class. Dr. Mensah sees it on the campus board right away.</p>
+          <form id="help-form" class="stack" style="display:grid;gap:10px">
+            <div class="field">
+              <label for="help-kind">What do you need?</label>
+              <select class="input" id="help-kind">
+                <option value="learning">A student needs support with the lesson</option>
+                <option value="behaviour">Behaviour that needs a check-in</option>
+                <option value="tech">Room or technology problem</option>
+                <option value="resource">Cover or resources</option>
+                <option value="safeguard">Welfare or safeguarding concern (urgent)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="help-student">Which student? (optional)</label>
+              <select class="input" id="help-student"></select>
+            </div>
+            <div class="field">
+              <label for="help-text">Details</label>
+              <textarea class="textarea" id="help-text" rows="2" maxlength="200" placeholder="For example: Kwame is stuck on the Calvin cycle. Could someone sit with him?"></textarea>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+              <button class="btn btn-primary" type="submit">Send to principal</button>
+              <span class="help-form-note" id="help-status" role="status" aria-live="polite"></span>
+            </div>
+          </form>
+          <h3 style="margin:16px 0 8px">Your requests</h3>
+          <ul class="my-questions" id="my-help"></ul>
         </section>
       </aside>
     </div>

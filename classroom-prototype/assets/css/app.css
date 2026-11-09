@@ -58,6 +58,7 @@ button, input, textarea, select { font: inherit; color: inherit; }
 .page-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--s4); margin-bottom: var(--s5); }
 .page-head p { color: var(--ink-2); max-width: 60ch; margin-top: var(--s2); }
 .eyebrow { font-size: var(--fs-xs); font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal-ink); margin-bottom: var(--s2); }
+.stage-grid { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: var(--s5); align-items: start; }
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s5); }
 .stack > * + * { margin-top: var(--s4); }
 
@@ -311,8 +312,8 @@ button, input, textarea, select { font: inherit; color: inherit; }
 .pillars p { color: var(--ink-2); font-size: var(--fs-sm); margin-top: var(--s2); }
 
 /* ---------- Architecture ---------- */
-.arch { display: grid; gap: var(--s6); }
-.arch section { scroll-margin-top: 80px; }
+.arch { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s6); }
+.arch section { scroll-margin-top: 80px; min-width: 0; }
 .arch h2 { display: flex; gap: var(--s3); align-items: baseline; margin-bottom: var(--s3); }
 .arch h2 .n { font-family: var(--font-hand); font-size: 1.8rem; color: var(--orange); line-height: 1; }
 .arch p, .arch li { max-width: 78ch; }
@@ -343,6 +344,7 @@ pre code { background: none; padding: 0; }
   .device-grid { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 900px) {
+  .stage-grid { grid-template-columns: 1fr; }
   .console { grid-template-columns: 1fr; }
   .hero { grid-template-columns: 1fr; }
   .split-ask { grid-template-columns: 1fr; }

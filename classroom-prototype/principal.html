@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Principal · Chalkroom prototype</title>
+  <meta name="description" content="The principal's campus view: every class, where each lesson is, how it's going, and help requests from teachers.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Figtree:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/app.css">
+  <link rel="stylesheet" href="assets/css/principal.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="Chalkroom overview">
+      <svg viewBox="0 0 34 34" aria-hidden="true"><rect x="2" y="4" width="30" height="22" rx="4" fill="#FCFBF7" stroke="#23211E" stroke-width="2.5"/><path d="M9 18 C12 10 15 22 18 14 S24 12 26 10" fill="none" stroke="#D9622B" stroke-width="2.4" stroke-linecap="round"/><rect x="12" y="27" width="14" height="3" rx="1.5" fill="#23211E"/></svg>
+      Chalkroom
+    </a>
+    <nav class="site-nav" aria-label="Demos">
+      <ul>
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="join.html">Join</a></li>
+        <li><a href="classroom.html">Classroom</a></li>
+        <li><a href="teacher.html">Teacher console</a></li>
+        <li><a href="ask.html">Ask</a></li>
+        <li><a href="present.html">Present</a></li>
+        <li><a href="devices.html">Devices</a></li>
+        <li><a href="principal.html" aria-current="page">Principal</a></li>
+        <li><a href="architecture.html">Architecture</a></li>
+      </ul>
+    </nav>
+    <span class="badge">Prototype · simulated data</span>
+  </header>
+
+  <main class="page">
+    <div class="page-head">
+      <div>
+        <p class="eyebrow">Principal · campus view</p>
+        <h1>Lakeview High, today</h1>
+        <p>Every class that's running, where each lesson is, how it's going, and what teachers need. Look into any class in one tap, or work the help queue without leaving this screen.</p>
+        <div class="p-head-meta">
+          <span class="chip">Dr. Rachel Mensah · Principal</span>
+          <span class="chip" id="clock-chip">10:02</span>
+          <span class="chip" id="block-chip">Block C</span>
+        </div>
+      </div>
+    </div>
+
+    <section class="stat-strip" aria-label="Campus summary" id="stats"></section>
+
+    <div class="seg p-tabs" role="group" aria-label="Views">
+      <button type="button" data-view="campus" aria-pressed="true">Campus</button>
+      <button type="button" data-view="help" aria-pressed="false">Help requests</button>
+      <button type="button" data-view="teachers" aria-pressed="false">Teachers</button>
+      <button type="button" data-view="schedule" aria-pressed="false">Day schedule</button>
+    </div>
+
+    <section id="view-campus" class="p-grid" aria-label="Campus">
+      <div>
+        <div class="panel-head" style="margin-bottom:12px"><h2>Classes running now</h2><span class="muted" style="font-size:var(--fs-sm)">Tap “Look in” to pop into a class</span></div>
+        <div class="tiles" id="tiles"></div>
+      </div>
+      <aside class="p-side" aria-label="Needs you">
+        <section class="panel" aria-labelledby="help-h">
+          <div class="panel-head"><h2 id="help-h">Help requests</h2><span class="chip" id="help-count">0 open</span></div>
+          <div class="help-list" id="help-list"></div>
+        </section>
+        <section class="panel" aria-labelledby="attn-h">
+          <div class="panel-head"><h2 id="attn-h">Students to check on</h2></div>
+          <ul class="attn-list" id="attn-list"></ul>
+        </section>
+      </aside>
+    </section>
+
+    <section id="view-help" class="panel" aria-label="All help requests" hidden>
+      <div class="panel-head">
+        <h2>All help requests</h2>
+        <div class="seg" role="group" aria-label="Filter">
+          <button type="button" data-filter="open" aria-pressed="true">Open</button>
+          <button type="button" data-filter="all" aria-pressed="false">All</button>
+          <button type="button" data-filter="resolved" aria-pressed="false">Resolved</button>
+        </div>
+      </div>
+      <div class="help-list" id="help-full"></div>
+    </section>
+
+    <section id="view-teachers" aria-label="Teachers" hidden>
+      <div class="teacher-table">
+        <table>
+          <thead><tr><th scope="col">Teacher</th><th scope="col">Class now</th><th scope="col">Lessons on time</th><th scope="col">Avg understanding</th><th scope="col">Median reply (min)</th><th scope="col">Student rating</th><th scope="col">Help asked (30 days)</th></tr></thead>
+          <tbody id="teacher-rows"></tbody>
+        </table>
+      </div>
+      <div class="teach-detail" id="teacher-detail"></div>
+    </section>
+
+    <section id="view-schedule" aria-label="Day schedule" hidden>
+      <div class="sched-days" id="sched-days"></div>
+      <div class="sched-grid" id="sched-grid"></div>
+      <p class="muted" style="font-size:var(--fs-sm);margin-top:10px">Bars show how far each lesson has run in Block C. The orange line is now.</p>
+    </section>
+
+    <aside class="drawer" id="drawer" aria-labelledby="drawer-title" hidden>
+      <div class="drawer-head">
+        <div>
+          <p class="eyebrow" id="drawer-kicker" style="margin:0"></p>
+          <h2 id="drawer-title"></h2>
+        </div>
+        <button class="btn btn-icon btn-ghost" type="button" id="drawer-close" aria-label="Close class view">✕</button>
+      </div>
+      <div id="drawer-body"></div>
+    </aside>
+
+    <div class="demo-bar" aria-label="Demo controls" style="margin-top:28px">
+      <span class="demo-title">Scripted school day</span>
+      <button class="btn btn-sm" type="button" data-action="play">Play</button>
+      <button class="btn btn-sm" type="button" data-action="restart">Restart</button>
+      <input type="range" aria-label="Timeline position" value="0">
+      <span class="time">0:00 / 1:00</span>
+      <p class="scene-cue" id="cue">Press Play. Twenty minutes of class pass in one minute, and requests arrive as they would on a real day.</p>
+    </div>
+  </main>
+
+  <footer class="site-foot">
+    <span>Chalkroom prototype. Every live behaviour is scripted.</span>
+    <span>Works offline except for the fonts.</span>
+  </footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/school-data.js"></script>
+  <script src="assets/js/chalk.js"></script>
+  <script src="assets/js/demo-engine.js"></script>
+  <script src="assets/js/principal.js"></script>
+</body>
+</html>

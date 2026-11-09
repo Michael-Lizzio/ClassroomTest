@@ -21,6 +21,7 @@ Pages, in the order of the 3-minute tour below:
 | Ask a question | `ask.html` | Student phone (drag to circle, write, send) and teacher inbox side by side |
 | Present mode | `present.html` | Projector screen, slides from notes, Prev / Next, captions with on/off |
 | Every device | `devices.html` | Same class on iPhone, Android and desktop frames |
+| Principal | `principal.html` | Campus view of every running class, help queue, look-in drawer, teacher performance, day schedule |
 | Architecture | `architecture.html` | Supabase plan for the real app, covering the ten topics |
 
 Each demo page has Play, Pause, Restart and a scrubber. The viewer can still click around by hand at any time. Most pages say "Prototype · simulated data" in the header.
@@ -35,6 +36,18 @@ Works offline except for the two Google Fonts (Caveat for board handwriting, Fig
 - Every illustration is inline SVG, built by `assets/js/chalk.js` (the room, the board, the teacher, the students, the projector screen, the QR stand-in).
 - Motion uses CSS keyframes and the Web Animations API. UI changes take 150 to 400 ms. Scene moves take about a second. With `prefers-reduced-motion`, animations drop to near-zero duration and the projector screen fades instead of sliding.
 - No purple-to-blue gradients, no emoji icons, no glassmorphism.
+
+## Principal's campus view
+
+`principal.html` is the view for the principal, Dr. Rachel Mensah. It's built for one screen: see every class running now, understand where each lesson is and how it's going, and step into any class or teacher's performance in one tap.
+
+- **Campus tiles.** One tile per running class: room, teacher, lesson progress bar (segment by segment, with the current segment in orange), attendance, understanding (exit-ticket average out of 4), on-task %, and a sparkline of the last six understanding checks. Status is On track, Watch (understanding below 2.8 or on-task below 80%), or Help requested.
+- **Look in.** Opens a drawer for any class: a live view of the room with an "Observe quietly" toggle (the teacher is notified that the principal is observing), the lesson stepper, the exit-ticket breakdown, students to check on, that class's help requests, the class activity log, and a message box to the teacher.
+- **Help requests.** Teachers raise them from the teacher console at any moment (the "Ask the principal for help" panel). The principal can acknowledge, route safeguarding concerns to the counsellor and safeguarding lead, look in on the class, or resolve. The queue is sorted by urgency, with safeguarding at the top.
+- **Teachers.** A performance table (lessons on time, understanding, median reply time, student rating, help asked in 30 days), with a per-teacher detail panel: eight-week understanding trend, notes, a walkthrough request, and a link into their class.
+- **Day schedule.** The day's blocks, plus Block C with each class's lesson progress against a shared clock.
+
+The principal's demo plays a twenty-minute stretch of school in one minute: a learning-support request from Ms. Okafor, a safeguarding request from Mr. Walsh that the principal routes to the counsellor, a look-in on Biology 101 with a message to the teacher, and requests being resolved.
 
 ## Presenter script (3 minutes)
 
@@ -95,6 +108,8 @@ classroom-prototype/
   assets/js/chalk.js         shared SVG scene, teacher, board, screen, QR stand-in
   assets/js/data.js          fake class, students, questions, notes, transcript
   assets/js/inbox.js         teacher's questions inbox
+  assets/js/school-data.js   principal's view: classes, teachers, help requests
+  assets/css/principal.css   principal's view styles
   assets/js/<page>.js        one per demo page
   README.md
 ```
