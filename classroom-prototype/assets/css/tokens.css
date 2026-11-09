@@ -1,15 +1,49 @@
-/* Chalkroom design tokens. Warm flat illustration with chalk and marker accents. */
+/*
+ * Chalkroom design tokens (v2, enterprise pass).
+ * One system for every page: teachers, students and administrators share the same
+ * neutrals, status colours, type scale, spacing, radii, elevation and motion.
+ * Chalk-and-marker colours are kept for illustration and brand moments only.
+ * Legacy names (--ink, --paper, --teal ...) are aliases so older rules keep working.
+ */
 :root {
-  /* Colour: paper and ink */
-  --paper: #F5EFE3;
-  --paper-2: #EDE4D0;
-  --paper-3: #E3D7BE;
-  --ink: #23211E;
-  --ink-2: #4E4a42;
-  --ink-3: #6F6A60;
-  --white: #FFFFFF;
+  /* Neutrals */
+  --neutral-0: #FFFFFF;
+  --neutral-25: #FBFAF7;
+  --neutral-50: #F6F4EF;   /* page background */
+  --neutral-100: #EFECE4;  /* muted surface */
+  --neutral-200: #E4DFD3;  /* hairline */
+  --neutral-300: #CFC8B8;  /* strong hairline, input borders */
+  --neutral-500: #8A8476;
+  --neutral-600: #6B665A;  /* secondary text, AA on white */
+  --neutral-800: #3A3731;
+  --neutral-900: #1F1D1A;  /* primary text */
 
-  /* Colour: room */
+  /* Brand (teal) and accent (marker orange) */
+  --brand-50: #EAF5F2;
+  --brand-100: #CFE7E1;
+  --brand-600: #1E7566;
+  --brand-700: #175F52;
+  --brand-800: #14594C;
+  --accent-100: #FBE3D5;
+  --accent-600: #C4531F;   /* AA on white for text */
+  --accent-500: #D9622B;   /* focus ring and marks */
+
+  /* Status */
+  --success-50: #E8F4EC;  --success-700: #2B6B45;
+  --warning-50: #FBF1D6;  --warning-700: #7A5410;
+  --danger-50: #FBE4E9;   --danger-700: #9B1F3C;
+  --info-50: #E4ECF9;     --info-700: #2D5C9E;
+
+  /* Chalk palette (illustration and brand only) */
+  --chalk-mustard: #E8B043;
+  --chalk-mustard-50: #F7E7BD;
+  --chalk-rose: #C4506A;
+  --chalk-rose-50: #F4D5DC;
+  --chalk-blue: #2D5C9E;
+  --chalk-blue-50: #D5E2F4;
+  --chalk-green: #5E8C3A;
+
+  /* Room scene colours */
   --wall: #EADCC3;
   --wall-2: #D9C6A5;
   --floor: #D6B68A;
@@ -20,33 +54,52 @@
   --board-tray: #7F8A83;
   --window: #CFE3E6;
 
-  /* Colour: marker accents (AA on paper for text uses ink-coloured labels) */
-  --teal: #1E7566;
-  --teal-2: #CFE7E1;
-  --teal-ink: #14594C;
-  --orange: #D9622B;
-  --orange-2: #F8DCCB;
-  --mustard: #E8B043;
-  --mustard-2: #F7E7BD;
-  --rose: #C4506A;
-  --rose-2: #F4D5DC;
-  --blue: #2D5C9E;
-  --blue-2: #D5E2F4;
-  --green: #5E8C3A;
+  /* Semantic aliases used across components */
+  --bg: var(--neutral-50);
+  --surface: var(--neutral-0);
+  --surface-muted: var(--neutral-100);
+  --line: var(--neutral-200);
+  --line-strong: var(--neutral-300);
+  --text: var(--neutral-900);
+  --text-muted: var(--neutral-600);
+  --focus-ring: var(--accent-500);
 
-  /* Type */
+  /* Legacy names (kept so existing rules resolve to the new palette) */
+  --paper: var(--neutral-50);
+  --paper-2: var(--neutral-100);
+  --paper-3: var(--neutral-200);
+  --ink: var(--neutral-900);
+  --ink-2: var(--neutral-600);
+  --ink-3: var(--neutral-500);
+  --white: #FFFFFF;
+  --teal: var(--brand-600);
+  --teal-2: var(--brand-100);
+  --teal-ink: var(--brand-800);
+  --orange: var(--accent-500);
+  --orange-2: var(--accent-100);
+  --mustard: var(--chalk-mustard);
+  --mustard-2: var(--chalk-mustard-50);
+  --rose: var(--chalk-rose);
+  --rose-2: var(--chalk-rose-50);
+  --blue: var(--chalk-blue);
+  --blue-2: var(--chalk-blue-50);
+  --green: var(--chalk-green);
+
+  /* Type: one UI family, one handwriting family for the board */
   --font-ui: "Figtree", "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
   --font-hand: "Caveat", "Bradley Hand", "Segoe Print", cursive;
-  --fs-xs: 0.78rem;
-  --fs-sm: 0.9rem;
-  --fs-base: 1rem;
-  --fs-md: 1.125rem;
-  --fs-lg: 1.4rem;
-  --fs-xl: clamp(1.8rem, 3.2vw, 2.6rem);
-  --fs-hero: clamp(2.2rem, 5vw, 3.8rem);
+  --fs-2xs: 0.75rem;    /* 12px: overlines and metadata only */
+  --fs-xs: 0.8125rem;   /* 13px */
+  --fs-sm: 0.875rem;    /* 14px: secondary text, controls */
+  --fs-base: 1rem;      /* 16px: body */
+  --fs-md: 1.125rem;    /* 18px */
+  --fs-lg: 1.375rem;    /* 22px: section titles */
+  --fs-xl: clamp(1.625rem, 2.6vw, 2.125rem);   /* page titles */
+  --fs-hero: clamp(2rem, 4.2vw, 3rem);
+  --lh-tight: 1.2;
   --lh: 1.5;
 
-  /* Space */
+  /* Space: 4px base */
   --s1: 4px;
   --s2: 8px;
   --s3: 12px;
@@ -56,20 +109,23 @@
   --s7: 48px;
 
   /* Shape */
-  --r-sm: 8px;
-  --r-md: 14px;
-  --r-lg: 22px;
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 14px;
   --r-pill: 999px;
   --touch: 44px;
+  --control-h: 40px;
 
-  /* Elevation */
-  --shadow-1: 0 1px 0 rgba(35, 33, 30, 0.06), 0 2px 6px rgba(35, 33, 30, 0.08);
-  --shadow-2: 0 10px 28px rgba(35, 33, 30, 0.16);
-  --shadow-3: 0 24px 60px rgba(35, 33, 30, 0.22);
+  /* Elevation: soft, consistent */
+  --shadow-1: 0 1px 2px rgba(31, 29, 26, 0.06);
+  --shadow-2: 0 4px 14px rgba(31, 29, 26, 0.08);
+  --shadow-3: 0 16px 40px rgba(31, 29, 26, 0.18);
+  --shadow-focus: 0 0 0 3px rgba(217, 98, 43, 0.35);
 
   /* Motion */
   --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
   --ease-settle: cubic-bezier(0.3, 1.3, 0.5, 1);
-  --dur-ui: 240ms;
+  --dur-fast: 150ms;
+  --dur-ui: 220ms;
   --dur-scene: 1100ms;
 }

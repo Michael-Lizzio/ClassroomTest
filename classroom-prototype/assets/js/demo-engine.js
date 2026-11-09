@@ -93,7 +93,8 @@
       if (opts.onReset) opts.onReset();
       fireSteps();
       frame();
-      if (wasPlaying) play(); else setPlaying(false);
+      // Seeking to the very end must not restart the timeline.
+      if (wasPlaying && t < duration) play(); else setPlaying(false);
     }
 
     function restart(autoplay = true) {

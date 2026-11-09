@@ -304,14 +304,14 @@
         return pt.matrixTransform(surface.getScreenCTM().inverse());
       };
       let drawing = null;
-      surface.addEventListener("pointerdown", (e) => {
+      g.addEventListener("pointerdown", (e) => {
         const p = toBoard(e);
         drawing = { pts: [p], el: el("path", { fill: "none", stroke: ORANGE, "stroke-width": 4, "stroke-linecap": "round", "stroke-linejoin": "round", class: "mark live" }) };
         marksG.append(drawing.el);
-        surface.setPointerCapture(e.pointerId);
+        g.setPointerCapture(e.pointerId);
         e.preventDefault();
       });
-      surface.addEventListener("pointermove", (e) => {
+      g.addEventListener("pointermove", (e) => {
         if (!drawing) return;
         drawing.pts.push(toBoard(e));
         drawing.el.setAttribute("d", "M" + drawing.pts.map((q) => q.x.toFixed(1) + " " + q.y.toFixed(1)).join(" L"));
@@ -331,8 +331,8 @@
         setDraft(mark);
         if (state.onMark) state.onMark(mark, { region: { x: mark.cx - 90, y: mark.cy - 60, w: 180, h: 120 } });
       };
-      surface.addEventListener("pointerup", finish);
-      surface.addEventListener("pointercancel", finish);
+      g.addEventListener("pointerup", finish);
+      g.addEventListener("pointercancel", finish);
     }
 
     renderAreas();

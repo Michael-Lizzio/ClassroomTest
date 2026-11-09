@@ -51,7 +51,7 @@
       run: () => {
         setStep("scan");
         scanLine.classList.remove("is-on");
-        dForm.hidden = true;
+        dForm.hidden = false; // the form is always usable by hand; the timeline only types into it
         dRoom.hidden = true;
         phoneJoin.style.transform = "";
         setCue("Press Play. The phone and the desktop show the same join, side by side.");
