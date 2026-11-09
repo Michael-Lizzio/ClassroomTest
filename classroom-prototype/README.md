@@ -20,6 +20,7 @@ Pages, in the order of the 3-minute tour below:
 | Teacher console | `teacher.html` | Live view, board areas, handwriting, lesson notes, questions inbox, roster, Whiteboard / Present switch |
 | Ask a question | `ask.html` | Student phone (drag to circle, write, send) and teacher inbox side by side |
 | Present mode | `present.html` | Projector screen, slides from notes, Prev / Next, captions with on/off |
+| Principal dashboard | `principal.html` | Overview of all classes, student presence, engagement, performance, and help requests |
 | Every device | `devices.html` | Same class on iPhone, Android and desktop frames |
 | Architecture | `architecture.html` | Supabase plan for the real app, covering the ten topics |
 
@@ -36,7 +37,7 @@ Works offline except for the two Google Fonts (Caveat for board handwriting, Fig
 - Motion uses CSS keyframes and the Web Animations API. UI changes take 150 to 400 ms. Scene moves take about a second. With `prefers-reduced-motion`, animations drop to near-zero duration and the projector screen fades instead of sliding.
 - No purple-to-blue gradients, no emoji icons, no glassmorphism.
 
-## Presenter script (3 minutes)
+## Presenter script (3+ minutes)
 
 1. **Overview (20 s).** "This is Chalkroom. A live classroom where students draw on the board and teachers answer privately." Let the hero loop run once.
 2. **Join (30 s).** Open `join.html`. Press Play. "No accounts. Scan the code, type a name, and you're in. On a laptop it's the same link." Point out that the phone and the desktop show the same join.
@@ -44,7 +45,8 @@ Works offline except for the two Google Fonts (Caveat for board handwriting, Fig
 4. **Teacher console (40 s).** Open `teacher.html`. Press Play. "Questions arrive in a private inbox, never on the board. Each one has a snapshot of exactly what was circled. Areas can be hidden, notes can be pushed to the board, and the same board goes into Present mode." Click one area toggle, then Push a note.
 5. **Ask a question (40 s).** Open `ask.html`. Drag a circle on the phone's board, type a question, and send. "That's the real interaction. The circle is real, the question is real in this page, and the teacher gets it."
 6. **Present mode (30 s).** Open `present.html`. Press Play. "The projector screen comes down, slides follow the notes, and captions type along the bottom." Turn captions off and on.
-7. **Devices and architecture (15 s).** Open `devices.html`, then `architecture.html`. "The layout adapts from a phone to a laptop. The architecture page is the Supabase plan: Auth, Postgres, Realtime, Storage and Edge Functions, with transcription and privacy covered."
+7. **Principal dashboard (30 s).** Open `principal.html`. Press Play. "School administrators can see all classes at a glance. Each card shows real-time progress, student engagement, and performance. Teachers can request help with struggling students or technical issues. The principal can click any class to see details or pop in to review."
+8. **Devices and architecture (15 s).** Open `devices.html`, then `architecture.html`. "The layout adapts from a phone to a laptop. The architecture page is the Supabase plan: Auth, Postgres, Realtime, Storage and Edge Functions, with transcription and privacy covered."
 
 ## What is simulated and what would be real
 
@@ -83,18 +85,22 @@ The architecture page (`architecture.html`) describes the real system. Its price
 3. Which speech-to-text provider? Deepgram is the proposed default, but cost should be re-tested at 100 classes.
 4. What is the pricing unit: per school, per teacher, or per seat?
 5. Should students see each other's questions if the teacher pins them? The current prototype says no.
+6. For the principal dashboard: should help requests be categorized (e.g., technical, student-needs, lesson-pacing)? Should there be read/unread states?
+7. Should the principal be able to send real-time messages to teachers, or should it be asynchronous help ticket system?
+8. What performance metrics matter most: engagement level, response time to questions, or student assessment scores?
 
 ## Files
 
 ```
 classroom-prototype/
   index.html  join.html  classroom.html  teacher.html
-  ask.html  present.html  devices.html  architecture.html
+  ask.html  present.html  principal.html  devices.html  architecture.html
   assets/css/tokens.css  assets/css/app.css
   assets/js/demo-engine.js   shared timeline: play, pause, restart, scrub
   assets/js/chalk.js         shared SVG scene, teacher, board, screen, QR stand-in
-  assets/js/data.js          fake class, students, questions, notes, transcript
+  assets/js/data.js          fake class, students, questions, notes, transcript, principal data
   assets/js/inbox.js         teacher's questions inbox
+  assets/js/principal.js     principal dashboard: class overview, help requests, detail view
   assets/js/<page>.js        one per demo page
   README.md
 ```

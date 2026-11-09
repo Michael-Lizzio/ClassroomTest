@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Principal Dashboard · Chalkroom</title>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/app.css">
+  <style>
+    .principal-container {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 24px;
+      padding: 24px;
+    }
+
+    .classes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 20px;
+    }
+
+    .class-card {
+      background: var(--paper);
+      border: 2px solid var(--ink);
+      border-radius: 8px;
+      padding: 20px;
+      cursor: pointer;
+      transition: transform 100ms ease-out, box-shadow 100ms ease-out;
+      position: relative;
+    }
+
+    .class-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .class-card.has-alert {
+      border-color: var(--rose);
+      background: rgba(206, 87, 87, 0.05);
+    }
+
+    .class-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .class-header h3 {
+      margin: 0;
+      font-size: var(--fs-sm);
+      font-weight: 600;
+      color: var(--ink);
+      flex: 1;
+    }
+
+    .stage-badge {
+      background: var(--teal);
+      color: var(--paper);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: var(--fs-xs);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .stage-badge.complete {
+      background: var(--mustard);
+    }
+
+    .teacher-info {
+      font-size: var(--fs-xs);
+      color: var(--ink-light);
+      margin-bottom: 12px;
+    }
+
+    .teacher-info strong {
+      color: var(--ink);
+    }
+
+    .metrics-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 12px;
+      font-size: var(--fs-xs);
+    }
+
+    .metric {
+      flex: 1;
+    }
+
+    .metric-label {
+      color: var(--ink-light);
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .metric-value {
+      color: var(--ink);
+      font-weight: 600;
+      font-size: var(--fs-sm);
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      background: var(--ink-light);
+      border-radius: 3px;
+      overflow: hidden;
+      margin: 12px 0;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--teal);
+      border-radius: 3px;
+      transition: width 400ms ease-out;
+    }
+
+    .progress-fill.high-engagement {
+      background: var(--teal);
+    }
+
+    .progress-fill.medium-engagement {
+      background: var(--orange);
+    }
+
+    .progress-fill.low-engagement {
+      background: var(--rose);
+    }
+
+    .engagement-indicator {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: var(--fs-xs);
+      margin: 12px 0;
+    }
+
+    .engagement-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--teal);
+    }
+
+    .engagement-dot.medium {
+      background: var(--orange);
+    }
+
+    .engagement-dot.low {
+      background: var(--rose);
+    }
+
+    .question-count {
+      display: inline-block;
+      background: var(--blue);
+      color: var(--paper);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: var(--fs-xs);
+      font-weight: 600;
+      margin-top: 12px;
+    }
+
+    .help-panel {
+      background: var(--paper);
+      border: 2px solid var(--ink);
+      border-radius: 8px;
+      padding: 20px;
+      height: fit-content;
+      position: sticky;
+      top: 24px;
+    }
+
+    .help-panel h2 {
+      margin: 0 0 16px 0;
+      font-size: var(--fs-sm);
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .help-requests {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .help-item {
+      background: var(--paper);
+      border: 2px solid var(--ink-light);
+      border-radius: 6px;
+      padding: 12px;
+      transition: all 100ms ease-out;
+      cursor: pointer;
+    }
+
+    .help-item:hover {
+      border-color: var(--ink);
+      box-shadow: var(--shadow-xs);
+    }
+
+    .help-item.urgent {
+      border-color: var(--rose);
+      background: rgba(206, 87, 87, 0.05);
+    }
+
+    .help-item h4 {
+      margin: 0 0 4px 0;
+      font-size: var(--fs-xs);
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .help-time {
+      font-size: var(--fs-xs);
+      color: var(--ink-light);
+      margin-bottom: 6px;
+    }
+
+    .help-issue {
+      font-size: var(--fs-xs);
+      color: var(--ink);
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+
+    .help-priority {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: var(--fs-xs);
+      font-weight: 600;
+      background: var(--rose);
+      color: var(--paper);
+    }
+
+    .help-priority.medium {
+      background: var(--orange);
+    }
+
+    .help-empty {
+      text-align: center;
+      padding: 20px 0;
+      color: var(--ink-light);
+      font-size: var(--fs-xs);
+    }
+
+    .detail-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(35, 33, 30, 0.8);
+      display: none;
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .detail-overlay.is-open {
+      display: flex;
+    }
+
+    .detail-card {
+      background: var(--paper);
+      border: 2px solid var(--ink);
+      border-radius: 8px;
+      padding: 32px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .detail-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--ink);
+      padding: 0;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .detail-close:hover {
+      background: var(--ink-light);
+      border-radius: 4px;
+    }
+
+    .detail-header {
+      margin-bottom: 24px;
+    }
+
+    .detail-header h2 {
+      margin: 0 0 8px 0;
+      font-size: var(--fs-base);
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .detail-header p {
+      margin: 0;
+      font-size: var(--fs-sm);
+      color: var(--ink-light);
+    }
+
+    .detail-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .detail-stat {
+      background: rgba(30, 117, 102, 0.1);
+      padding: 16px;
+      border-radius: 6px;
+    }
+
+    .detail-stat-label {
+      font-size: var(--fs-xs);
+      color: var(--ink-light);
+      margin-bottom: 4px;
+    }
+
+    .detail-stat-value {
+      font-size: var(--fs-base);
+      font-weight: 700;
+      color: var(--teal);
+    }
+
+    .detail-section {
+      margin-bottom: 24px;
+    }
+
+    .detail-section h3 {
+      margin: 0 0 12px 0;
+      font-size: var(--fs-sm);
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .detail-section p {
+      margin: 0;
+      font-size: var(--fs-sm);
+      color: var(--ink);
+      line-height: 1.6;
+    }
+
+    @media (max-width: 1100px) {
+      .principal-container {
+        grid-template-columns: 1fr;
+      }
+
+      .help-panel {
+        position: relative;
+        top: auto;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .classes-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="page-header">
+    <nav class="page-nav">
+      <a href="index.html">Overview</a>
+      <a href="join.html">Join</a>
+      <a href="classroom.html">Classroom</a>
+      <a href="teacher.html">Teacher</a>
+      <a href="ask.html">Ask</a>
+      <a href="present.html">Present</a>
+      <a href="devices.html">Devices</a>
+      <a href="principal.html" aria-current="page">Principal</a>
+      <a href="architecture.html">Architecture</a>
+    </nav>
+    <div class="page-badge">Prototype · simulated data</div>
+  </header>
+
+  <main class="principal-container">
+    <section>
+      <h1 id="page-title" style="margin: 0 0 24px 0; font-size: var(--fs-lg); font-weight: 700; color: var(--ink);">
+        <span id="principal-name"></span>'s Dashboard
+      </h1>
+      <div class="classes-grid" id="classes-grid"></div>
+    </section>
+
+    <aside class="help-panel">
+      <h2>🚨 Help Requests</h2>
+      <div class="help-requests" id="help-requests"></div>
+    </aside>
+  </main>
+
+  <div class="demo-bar">
+    <button id="restart-btn" aria-label="Restart the demo">⟲</button>
+    <button id="play-btn" aria-label="Play the demo">▶</button>
+    <input type="range" id="scrubber" min="0" max="100" value="0" aria-label="Scrub through the demo">
+    <span id="time-display">0:00</span>
+  </div>
+
+  <div class="detail-overlay" id="detail-overlay">
+    <div class="detail-card">
+      <button class="detail-close" id="detail-close">×</button>
+      <div id="detail-content"></div>
+    </div>
+  </div>
+
+  <footer class="page-footer">
+    Works offline except for the fonts.
+  </footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/demo-engine.js"></script>
+  <script src="assets/js/principal.js"></script>
+</body>
+</html>

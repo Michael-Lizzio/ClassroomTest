@@ -115,5 +115,103 @@ window.CHALK_DATA = {
     { t: 92, text: "It fixes carbon from the air into sugar, one step at a time." },
     { t: 104, text: "Good questions are already coming in, so keep them coming." },
     { t: 114, text: "Exit ticket in two minutes. Name both stages, and say where the oxygen comes from." }
-  ]
+  ],
+
+  // Principal's view of all classes
+  principal: {
+    name: "Dr. Elizabeth Chen",
+    school: "Lincoln High School",
+    classes: [
+      {
+        id: "cls-bio101",
+        name: "Biology 101: Photosynthesis",
+        teacher: "Ms. Naomi Okafor",
+        room: "Room 214",
+        period: "Period 3",
+        time: "9:30 AM",
+        studentCount: 8,
+        enrollment: 28,
+        progress: 45,
+        duration: 40,
+        stage: "Active",
+        engagement: "high",
+        questionsCount: 5,
+        performanceScore: 92,
+        lastUpdate: "2 min ago"
+      },
+      {
+        id: "cls-chem201",
+        name: "Chemistry 201: Reactions",
+        teacher: "Mr. James Park",
+        room: "Room 105",
+        period: "Period 3",
+        time: "9:30 AM",
+        studentCount: 7,
+        enrollment: 26,
+        progress: 28,
+        duration: 40,
+        stage: "Active",
+        engagement: "medium",
+        questionsCount: 2,
+        performanceScore: 78,
+        lastUpdate: "3 min ago"
+      },
+      {
+        id: "cls-eng301",
+        name: "English 301: Shakespeare",
+        teacher: "Ms. Sarah Williams",
+        room: "Room 306",
+        period: "Period 3",
+        time: "9:30 AM",
+        studentCount: 8,
+        enrollment: 25,
+        progress: 72,
+        duration: 40,
+        stage: "Active",
+        engagement: "high",
+        questionsCount: 8,
+        performanceScore: 88,
+        lastUpdate: "1 min ago"
+      },
+      {
+        id: "cls-hist102",
+        name: "History 102: Civil War",
+        teacher: "Mr. Robert Martinez",
+        room: "Room 210",
+        period: "Period 2",
+        time: "8:30 AM",
+        studentCount: 0,
+        enrollment: 24,
+        progress: 100,
+        duration: 40,
+        stage: "Complete",
+        engagement: "high",
+        questionsCount: 6,
+        performanceScore: 95,
+        lastUpdate: "15 min ago"
+      }
+    ],
+    helpRequests: [
+      {
+        id: "help-1",
+        classId: "cls-chem201",
+        teacher: "Mr. James Park",
+        timestamp: "9:42 AM",
+        priority: "high",
+        issue: "Student Mateo is struggling with mole conversions—needs individual attention",
+        studentName: "Mateo",
+        status: "pending"
+      },
+      {
+        id: "help-2",
+        classId: "cls-bio101",
+        teacher: "Ms. Naomi Okafor",
+        timestamp: "9:35 AM",
+        priority: "medium",
+        issue: "Tech issue: projector screen not connecting to laptop",
+        studentName: null,
+        status: "pending"
+      }
+    ]
+  }
 };
